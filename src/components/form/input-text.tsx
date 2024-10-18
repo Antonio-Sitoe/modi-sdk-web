@@ -7,7 +7,7 @@ import {
   FormMessage,
   FormControl,
   FormLabel,
-} from '@/components/ui/form';
+} from '@/components/ui/form'
 
 import {
   Select,
@@ -16,17 +16,18 @@ import {
   SelectGroup,
   SelectTrigger,
   SelectContent,
-} from '@/components/ui/select';
+} from '@/components/ui/select'
 
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
-import { format } from 'date-fns';
-import { useState } from 'react';
-import { useNDAModi } from '@/contexts/step-state';
-import { UseFormReturn } from 'react-hook-form';
-import { maskPhone, removeNonNumeric } from '@/utils/general';
-import { Input, InputDatePicker, PhoneInput } from '@/components/ui/input';
-import { Sms, Call } from '@/assets/call';
+import { format } from 'date-fns'
+import { useState } from 'react'
+import { useNDAModi } from '@/contexts/step-state'
+import { UseFormReturn } from 'react-hook-form'
+import { maskPhone, removeNonNumeric } from '@/utils/general'
+import { Input, InputDatePicker, PhoneInput } from '@/components/ui/input'
+import { Sms, Call } from '@/assets/call'
+import { useSystem } from '@/contexts/useSystem'
 
 export function InputDefault({
   form,
@@ -36,12 +37,12 @@ export function InputDefault({
   type,
   required,
 }: {
-  name: string;
-  placeholder: string;
-  label: string;
-  type?: string;
-  form: UseFormReturn<any>;
-  required: boolean;
+  name: string
+  placeholder: string
+  label: string
+  type?: string
+  form: UseFormReturn<any>
+  required: boolean
 }) {
   return (
     <FormField
@@ -64,7 +65,7 @@ export function InputDefault({
         </FormItem>
       )}
     />
-  );
+  )
 }
 export function InputText({
   form,
@@ -73,11 +74,11 @@ export function InputText({
   placeholder,
   required,
 }: {
-  name: string;
-  placeholder: string;
-  label: string;
-  form: UseFormReturn<any>;
-  required: boolean;
+  name: string
+  placeholder: string
+  label: string
+  form: UseFormReturn<any>
+  required: boolean
 }) {
   return (
     <FormField
@@ -99,7 +100,7 @@ export function InputText({
         </FormItem>
       )}
     />
-  );
+  )
 }
 export function InputDocs({
   form,
@@ -109,13 +110,14 @@ export function InputDocs({
   required,
   setValue,
 }: {
-  name: string;
-  placeholder: string;
-  required: boolean;
-  label: string;
-  setValue(blob: File): void;
-  form: UseFormReturn<any>;
+  name: string
+  placeholder: string
+  required: boolean
+  label: string
+  setValue(blob: File): void
+  form: UseFormReturn<any>
 }) {
+  const { theme } = useSystem()
   return (
     <FormField
       control={form.control}
@@ -124,7 +126,9 @@ export function InputDocs({
         <FormItem>
           <FormControl>
             <>
-              <FormLabel className="font-bold text-primary">{label}</FormLabel>
+              <FormLabel className="font-bold" style={{ color: theme.primary }}>
+                {label}
+              </FormLabel>
               <div className="flex flex-col">
                 <label
                   htmlFor="file"
@@ -148,11 +152,11 @@ export function InputDocs({
                  focus:outline-none focus:ring focus:ring-primary
                  focus:border-blue-300 transition"
                     {...field}
-                    onChange={event => {
+                    onChange={(event) => {
                       if (event.target.files) {
-                        setValue(event.target.files[0]);
+                        setValue(event.target.files[0])
                       }
-                      field.onChange(event);
+                      field.onChange(event)
                     }}
                   />
                 </div>
@@ -163,18 +167,18 @@ export function InputDocs({
         </FormItem>
       )}
     />
-  );
+  )
 }
 export function InputPickerDate({
   form,
   label,
   name,
 }: {
-  name: string;
-  label: string;
-  form: UseFormReturn<any>;
+  name: string
+  label: string
+  form: UseFormReturn<any>
 }) {
-  const { setAllData } = useNDAModi();
+  const { setAllData } = useNDAModi()
   return (
     <FormField
       control={form.control}
@@ -188,32 +192,26 @@ export function InputPickerDate({
                 label={label}
                 // @ts-ignore
                 onChange={(
-                  event:
-                    | string
-                    | number
-                    | Date
-                    | dayjs.Dayjs
-                    | null
-                    | undefined,
+                  event: string | number | Date | dayjs.Dayjs | null | undefined
                 ) => {
                   try {
                     setAllData({
                       birth_date: format(dayjs(event).toDate(), 'yyyy-MM-dd'),
-                    });
+                    })
                   } catch (error) {
-                    console.log('Error de calendario', error);
+                    console.log('Error de calendario', error)
                   }
-                  field.onChange(event);
+                  field.onChange(event)
                 }}
                 value={field.value}
               />
             </FormControl>
             <FormMessage />
           </FormItem>
-        );
+        )
       }}
     />
-  );
+  )
 }
 export function InputEmail({
   form,
@@ -222,11 +220,11 @@ export function InputEmail({
   placeholder,
   required,
 }: {
-  name: string;
-  placeholder: string;
-  label: string;
-  required: boolean;
-  form: UseFormReturn<any>;
+  name: string
+  placeholder: string
+  label: string
+  required: boolean
+  form: UseFormReturn<any>
 }) {
   return (
     <FormField
@@ -244,9 +242,9 @@ export function InputEmail({
               {...field}
               value={field.value}
               required={required}
-              onChange={value => {
-                form.clearErrors([name]);
-                field.onChange(value);
+              onChange={(value) => {
+                form.clearErrors([name])
+                field.onChange(value)
               }}
             />
           </FormControl>
@@ -254,7 +252,7 @@ export function InputEmail({
         </FormItem>
       )}
     />
-  );
+  )
 }
 export function InputTextNuit({
   form,
@@ -263,13 +261,13 @@ export function InputTextNuit({
   placeholder,
   required,
 }: {
-  name: string;
-  placeholder: string;
-  label: string;
-  form: UseFormReturn<any>;
-  required: boolean;
+  name: string
+  placeholder: string
+  label: string
+  form: UseFormReturn<any>
+  required: boolean
 }) {
-  const { setAllData } = useNDAModi();
+  const { setAllData } = useNDAModi()
   return (
     <FormField
       control={form.control}
@@ -286,13 +284,13 @@ export function InputTextNuit({
               error={!!form.formState.errors?.nuit}
               {...field}
               value={field.value}
-              onChange={event => {
-                const value = event.target.value;
+              onChange={(event) => {
+                const value = event.target.value
                 if (/^\d{0,9}$/.test(value)) {
                   setAllData({
                     email: value,
-                  });
-                  field.onChange(event);
+                  })
+                  field.onChange(event)
                 }
               }}
             />
@@ -301,7 +299,7 @@ export function InputTextNuit({
         </FormItem>
       )}
     />
-  );
+  )
 }
 export function InputPhone({
   form,
@@ -309,14 +307,14 @@ export function InputPhone({
   name,
   placeholder = '',
 }: {
-  name: string;
-  placeholder: string;
-  label: string;
-  required?: boolean;
-  form: UseFormReturn<any>;
+  name: string
+  placeholder: string
+  label: string
+  required?: boolean
+  form: UseFormReturn<any>
 }) {
-  const { setPhoneNumber } = useNDAModi();
-  const [phoneShow, setPhoneShow] = useState(false);
+  const { setPhoneNumber } = useNDAModi()
+  const [phoneShow, setPhoneShow] = useState(false)
   return (
     <FormField
       control={form.control}
@@ -336,11 +334,11 @@ export function InputPhone({
               phone={field.value}
               placeholder={placeholder}
               name={name}
-              handleChange={event => {
-                form.clearErrors('phone');
-                const rawValue = maskPhone(event.target.value);
-                setPhoneNumber(removeNonNumeric(rawValue));
-                field.onChange(rawValue);
+              handleChange={(event) => {
+                form.clearErrors('phone')
+                const rawValue = maskPhone(event.target.value)
+                setPhoneNumber(removeNonNumeric(rawValue))
+                field.onChange(rawValue)
               }}
             />
           </FormControl>
@@ -348,18 +346,18 @@ export function InputPhone({
         </FormItem>
       )}
     />
-  );
+  )
 }
 export function InputEmailOrPhone({
   form,
   required,
 }: {
-  form: UseFormReturn<any>;
-  required: boolean;
+  form: UseFormReturn<any>
+  required: boolean
 }) {
-  const [isEmail, setIsEmail] = useState<'email' | 'phone'>('phone');
-  const [phoneShow, setPhoneShow] = useState(false);
-  const { setPhoneNumber } = useNDAModi();
+  const [isEmail, setIsEmail] = useState<'email' | 'phone'>('phone')
+  const [phoneShow, setPhoneShow] = useState(false)
+  const { setPhoneNumber } = useNDAModi()
 
   return (
     <div className="grid grid-cols-[80px_1fr] items-start justify-between gap-2">
@@ -368,11 +366,11 @@ export function InputEmailOrPhone({
         defaultValue={isEmail}
         onValueChange={(value: 'email' | 'phone') => {
           if (value === 'email') {
-            setPhoneNumber('');
+            setPhoneNumber('')
           } else {
-            form.setValue('email', '');
+            form.setValue('email', '')
           }
-          setIsEmail(value);
+          setIsEmail(value)
         }}
         required={required}
       >
@@ -406,9 +404,9 @@ export function InputEmailOrPhone({
                   error={!!form.formState.errors?.email}
                   {...field}
                   value={field.value}
-                  onChange={value => {
-                    form.clearErrors(['email']);
-                    field.onChange(value);
+                  onChange={(value) => {
+                    form.clearErrors(['email'])
+                    field.onChange(value)
                   }}
                 />
               </FormControl>
@@ -435,11 +433,11 @@ export function InputEmailOrPhone({
                   }
                   error={!!form.formState.errors?.phone}
                   phone={field.value}
-                  handleChange={event => {
-                    form.clearErrors('phone');
-                    const rawValue = maskPhone(event.target.value);
-                    setPhoneNumber(removeNonNumeric(rawValue));
-                    field.onChange(rawValue);
+                  handleChange={(event) => {
+                    form.clearErrors('phone')
+                    const rawValue = maskPhone(event.target.value)
+                    setPhoneNumber(removeNonNumeric(rawValue))
+                    field.onChange(rawValue)
                   }}
                 />
               </FormControl>
@@ -449,5 +447,5 @@ export function InputEmailOrPhone({
         />
       )}
     </div>
-  );
+  )
 }
