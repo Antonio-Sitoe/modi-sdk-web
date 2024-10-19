@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+'use client'
 
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
 import {
   InputText,
@@ -13,22 +13,22 @@ import {
   InputPickerDate,
   InputEmailOrPhone,
   InputDefault,
-} from '@/components/form/input-text';
+} from '@/components/form/input-text'
 
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { format } from 'date-fns';
-import { CreateSchema } from '@/utils/validations/schema';
-import { useEffect, useState } from 'react';
-import { maskPhone } from '@/utils/general';
-import { useSystem } from '@/contexts/useSystem';
-import { useNDAModi } from '@/contexts/step-state';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { simulateAsyncCall } from '@/actions/client';
-import { Form } from '@/components/ui/form';
-import { IFieldsProps } from '@/@types/types';
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { format } from 'date-fns'
+import { CreateSchema } from '@/utils/validations/schema'
+import { useEffect, useState } from 'react'
+import { maskPhone } from '@/utils/general'
+import { useSystem } from '@/contexts/useSystem'
+import { useNDAModi } from '@/contexts/step-state'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { simulateAsyncCall } from '@/actions/client'
+import { Form } from '@/components/ui/form'
+import { IFieldsProps } from '@/@types/types'
 
 // const formFields: FormFieldsType = [
 // { label: 'Nome completo', type: 'TEXT', required: true, name: 'name' },
@@ -53,86 +53,87 @@ import { IFieldsProps } from '@/@types/types';
 // ];
 
 export default function Register() {
-  const [animationParent] = useAutoAnimate();
-  const { modiConfig, previousPage, nextPage } = useSystem();
-  const { personData, setAllData, setIsLoading } = useNDAModi();
-  const [file, setFile] = useState<null | Blob>(null);
-  const { phone_number, name, birth_date, email } = personData;
+  const [animationParent] = useAutoAnimate()
+  const { modiConfig, previousPage, nextPage } = useSystem()
+  const { personData, setAllData, setIsLoading } = useNDAModi()
+  const [file, setFile] = useState<null | Blob>(null)
+  const { phone_number, name, birth_date, email } = personData
   const formFields =
-    modiConfig.workflowSteps.register_aditional_data.data.fields;
+    modiConfig.workflowSteps.register_aditional_data.data.fields
 
   const schema = CreateSchema(
-    formFields?.map(field => ({
+    formFields?.map((field) => ({
       name: field.name,
       required: field.required,
       type: field.type,
-    })) || [],
-  );
+    })) || []
+  )
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-  });
+  })
 
   async function onSubmit(data: any) {
-    setIsLoading({ isLoad: true, title: 'Carregando os dados' });
+    setIsLoading({ isLoad: true, title: 'Carregando os dados' })
 
     if (data?.name) {
       setAllData({
         name: data?.name,
-      });
+      })
     }
     if (data?.nuit) {
       setAllData({
         nuit: data.nuit,
-      });
+      })
     }
     if (data?.phoneNumber) {
       setAllData({
         phone_number: data?.phoneNumber,
-      });
+      })
     }
     if (data?.birthday) {
       setAllData({
         birth_date: format(data.birthday, 'yyyy-MM-dd'),
-      });
+      })
     }
     if (data?.file_doc) {
       setAllData({
         file_doc: file,
-      });
+      })
     }
     if (data?.email) {
       setAllData({
         email: data?.email,
-      });
+      })
     }
-    nextPage();
-    await simulateAsyncCall(false, 1500);
-    setIsLoading({ isLoad: false, title: '' });
+    nextPage()
+    await simulateAsyncCall(false, 1500)
+    setIsLoading({ isLoad: false, title: '' })
   }
 
   useEffect(() => {
     if (email) {
+      console.log('emai', email)
       // @ts-ignore
-      form.setValue('email', email);
+      form.setValue('email', email)
     }
     if (birth_date) {
       // @ts-ignore
-      form.setValue('birthday', dayjs(birth_date) as any);
+      form.setValue('birthday', dayjs(birth_date) as any)
     }
     if (name) {
       // @ts-ignore
-      form.setValue('name', name);
+      form.setValue('name', name)
     }
     if (phone_number) {
       // @ts-ignore
-      form.setValue('phoneNumber', maskPhone(phone_number));
+      form.setValue('phoneNumber', maskPhone(phone_number))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const renderInput = (field: IFieldsProps, index: number) => {
-    const { label, type, name, required, placeholder = '', inputType } = field;
+    const { label, type, name, required, placeholder = '', inputType } = field
 
     if (type === 'TEXT') {
       return (
@@ -144,17 +145,17 @@ export default function Register() {
           label={label}
           placeholder={placeholder}
         />
-      );
+      )
     }
 
     if (type === 'EMAIL|PHONE') {
-      return <InputEmailOrPhone required={required} form={form} key={index} />;
+      return <InputEmailOrPhone required={required} form={form} key={index} />
     }
 
     if (type === 'DATE') {
       return (
         <InputPickerDate form={form} label={label} name={name} key={index} />
-      );
+      )
     }
 
     if (type === 'NUIT') {
@@ -167,7 +168,7 @@ export default function Register() {
           label={label}
           placeholder={placeholder}
         />
-      );
+      )
     }
 
     if (type === 'PHONE') {
@@ -180,7 +181,7 @@ export default function Register() {
           label={label}
           placeholder={placeholder}
         />
-      );
+      )
     }
 
     if (type === 'EMAIL') {
@@ -193,7 +194,7 @@ export default function Register() {
           label={label}
           placeholder={placeholder}
         />
-      );
+      )
     }
 
     if (type === 'FILE|DOCS') {
@@ -207,7 +208,7 @@ export default function Register() {
           placeholder={placeholder}
           setValue={setFile}
         />
-      );
+      )
     }
 
     return (
@@ -219,8 +220,8 @@ export default function Register() {
         name={name}
         placeholder={placeholder}
       />
-    );
-  };
+    )
+  }
 
   return (
     <main className="max-w-lg m-auto px-4 py-16 sm:py-20 h-dvh">
@@ -247,10 +248,10 @@ export default function Register() {
                   type="button"
                   className="font-montSerrat"
                   onTouchEnd={() => {
-                    previousPage();
+                    previousPage()
                   }}
                   onClick={() => {
-                    previousPage();
+                    previousPage()
                   }}
                 >
                   Voltar
@@ -268,5 +269,5 @@ export default function Register() {
         </div>
       </section>
     </main>
-  );
+  )
 }

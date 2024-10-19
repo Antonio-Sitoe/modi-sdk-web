@@ -141,16 +141,16 @@ export function InputDocs({
                     id="file"
                     type="file"
                     required={required}
-                    accept=".pdf, .doc, .docx, .xls, .xlsx"
+                    accept=".pdf, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png"
                     className="block w-full text-sm text-gray-500 
-                 file:mr-4 file:py-2 file:px-4 
-                 file:border file:border-gray-300 
-                 file:rounded-l-md file:bg-gray-50 
-                 file:text-sm file:font-semibold 
-                 hover:file:bg-gray-100 
-                 border-[1px] rounded-sm py-2 px-3 border-[#dcdddf] 
-                 focus:outline-none focus:ring focus:ring-primary
-                 focus:border-blue-300 transition"
+             file:mr-4 file:py-2 file:px-4 
+             file:border file:border-gray-300 
+             file:rounded-l-md file:bg-gray-50 
+             file:text-sm file:font-semibold 
+             hover:file:bg-gray-100 
+             border-[1px] rounded-sm py-2 px-3 border-[#dcdddf] 
+             focus:outline-none focus:ring focus:ring-primary
+             focus:border-blue-300 transition"
                     {...field}
                     onChange={(event) => {
                       if (event.target.files) {
@@ -288,7 +288,7 @@ export function InputTextNuit({
                 const value = event.target.value
                 if (/^\d{0,9}$/.test(value)) {
                   setAllData({
-                    email: value,
+                    nuit: value,
                   })
                   field.onChange(event)
                 }
