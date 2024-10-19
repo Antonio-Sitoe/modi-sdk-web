@@ -367,6 +367,7 @@ export function InputEmailOrPhone({
         onValueChange={(value: 'email' | 'phone') => {
           if (value === 'email') {
             setPhoneNumber('')
+            form.setValue('phone', '')
           } else {
             form.setValue('email', '')
           }
