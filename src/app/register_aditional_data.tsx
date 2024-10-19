@@ -57,7 +57,7 @@ export default function Register() {
   const { modiConfig, previousPage, nextPage } = useSystem()
   const { personData, setAllData, setIsLoading } = useNDAModi()
   const [file, setFile] = useState<null | Blob>(null)
-  const { phone_number, name, birth_date, email } = personData
+  const { phone_number, name, birth_date, email, nuit } = personData
   const formFields =
     modiConfig.workflowSteps.register_aditional_data.data.fields
 
@@ -113,9 +113,12 @@ export default function Register() {
 
   useEffect(() => {
     if (email) {
-      console.log('emai', email)
       // @ts-ignore
       form.setValue('email', email)
+    }
+    if (nuit) {
+      // @ts-ignore
+      form.setValue('nuit', nuit)
     }
     if (birth_date) {
       // @ts-ignore
