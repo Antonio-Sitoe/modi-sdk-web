@@ -57,7 +57,7 @@ export default function Register() {
   const { modiConfig, previousPage, nextPage } = useSystem()
   const { personData, setAllData, setIsLoading } = useNDAModi()
   const [file, setFile] = useState<null | Blob>(null)
-  const { phone_number, name, birth_date, email, nuit } = personData
+  const { phone_number, name, birth_date, email, nuit, file_doc } = personData
   const formFields =
     modiConfig.workflowSteps.register_aditional_data.data.fields
 
@@ -203,6 +203,8 @@ export default function Register() {
     if (type === 'FILE|DOCS') {
       return (
         <InputDocs
+          // @ts-ignore
+          file={file_doc?.name}
           key={index}
           form={form}
           name={name}

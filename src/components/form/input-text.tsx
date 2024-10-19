@@ -109,6 +109,7 @@ export function InputDocs({
   placeholder,
   required,
   setValue,
+  file,
 }: {
   name: string
   placeholder: string
@@ -116,6 +117,7 @@ export function InputDocs({
   label: string
   setValue(blob: File): void
   form: UseFormReturn<any>
+  file: any
 }) {
   const { theme } = useSystem()
   return (
@@ -128,6 +130,7 @@ export function InputDocs({
             <>
               <FormLabel className="font-bold" style={{ color: theme.primary }}>
                 {label}
+                {file ? ' - ' + file : ''}
               </FormLabel>
               <div className="flex flex-col">
                 <label
