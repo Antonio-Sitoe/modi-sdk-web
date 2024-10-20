@@ -136,3 +136,16 @@ export function isRedTone(hex: string): boolean {
   // Define uma diferença mínima para garantir que o vermelho seja predominante
   return red > 1.5 * green && red > 1.5 * blue
 }
+
+const MAX_FILE_NAME_LENGTH = 20
+
+export function truncateFileName(name: string): string {
+  if (name.length <= MAX_FILE_NAME_LENGTH) return name
+  const extension = name.split('.').pop()
+  const nameWithoutExtension = name.substring(0, name.lastIndexOf('.'))
+  const truncatedName = nameWithoutExtension.substring(
+    0,
+    MAX_FILE_NAME_LENGTH - 3 - (extension?.length || 0)
+  )
+  return `${truncatedName}...${extension ? `.${extension}` : ''}`
+}

@@ -24,10 +24,12 @@ import { format } from 'date-fns'
 import { useState } from 'react'
 import { useNDAModi } from '@/contexts/step-state'
 import { UseFormReturn } from 'react-hook-form'
-import { maskPhone, removeNonNumeric } from '@/utils/general'
+import { maskPhone, removeNonNumeric, truncateFileName } from '@/utils/general'
 import { Input, InputDatePicker, PhoneInput } from '@/components/ui/input'
 import { Sms, Call } from '@/assets/call'
-import { useSystem } from '@/contexts/useSystem'
+import { Label } from '../ui/label'
+import { Button } from '../ui/button'
+import { Upload } from 'lucide-react'
 
 export function InputDefault({
   form,
@@ -104,22 +106,25 @@ export function InputText({
 }
 export function InputDocs({
   form,
-  label,
   name,
-  placeholder,
   required,
-  setValue,
-  file,
 }: {
   name: string
   placeholder: string
   required: boolean
   label: string
-  setValue(blob: File): void
   form: UseFormReturn<any>
-  file: any
 }) {
-  const { theme } = useSystem()
+  const {
+    setAllData,
+    personData: { file_doc },
+  } = useNDAModi()
+
+  // @ts-ignore
+  const fileName = file_doc?.name
+    ? // @ts-ignore
+      truncateFileName(file_doc?.name)
+    : 'Nenhum arquivo selecionado'
   return (
     <FormField
       control={form.control}
@@ -127,44 +132,45 @@ export function InputDocs({
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <>
-              <FormLabel className="font-bold" style={{ color: theme.primary }}>
-                {label}
-                {file ? ' - ' + file : ''}
-              </FormLabel>
-              <div className="flex flex-col">
-                <label
-                  htmlFor="file"
-                  className="mb-1 text-sm font-medium text-gray-700"
+            <div className="w-full space-y-2">
+              <Label
+                htmlFor="file"
+                className="text-sm font-medium text-gray-700"
+              >
+                Selecione um arquivo
+              </Label>
+              <div className="grid items-center gap-2">
+                <Button
+                  asChild
+                  variant="outline"
+                  style={{
+                    color: '#252525',
+                  }}
+                  className="w-full justify-start text-input text-left font-normal"
                 >
-                  {placeholder}
-                </label>
-                <div className="relative">
-                  <input
-                    id="file"
-                    type="file"
-                    required={required}
-                    accept=".pdf, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png"
-                    className="block w-full text-sm text-gray-500 
-             file:mr-4 file:py-2 file:px-4 
-             file:border file:border-gray-300 
-             file:rounded-l-md file:bg-gray-50 
-             file:text-sm file:font-semibold 
-             hover:file:bg-gray-100 
-             border-[1px] rounded-sm py-2 px-3 border-[#dcdddf] 
-             focus:outline-none focus:ring focus:ring-primary
-             focus:border-blue-300 transition"
-                    {...field}
-                    onChange={(event) => {
-                      if (event.target.files) {
-                        setValue(event.target.files[0])
-                      }
-                      field.onChange(event)
-                    }}
-                  />
-                </div>
+                  <label htmlFor="file" className="cursor-pointer">
+                    <Upload className="mr-2 h-4 w-4" />
+                    {fileName || 'Nenhum arquivo selecionado'}
+                  </label>
+                </Button>
+                <Input
+                  id="file"
+                  type="file"
+                  className="hidden h-0 w-0"
+                  style={{ display: 'none' }}
+                  required={required}
+                  {...field}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    if (event.target?.files) {
+                      setAllData({
+                        file_doc: event.target?.files[0],
+                      })
+                    }
+                    field.onChange(event)
+                  }}
+                />
               </div>
-            </>
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>

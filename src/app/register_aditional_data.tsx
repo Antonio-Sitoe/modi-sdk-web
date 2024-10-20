@@ -56,7 +56,7 @@ export default function Register() {
   const [animationParent] = useAutoAnimate()
   const { modiConfig, previousPage, nextPage } = useSystem()
   const { personData, setAllData, setIsLoading } = useNDAModi()
-  const [file, setFile] = useState<null | Blob>(null)
+
   const { phone_number, name, birth_date, email, nuit, file_doc } = personData
   const formFields =
     modiConfig.workflowSteps.register_aditional_data.data.fields
@@ -96,11 +96,7 @@ export default function Register() {
         birth_date: format(data.birthday, 'yyyy-MM-dd'),
       })
     }
-    if (data?.file_doc) {
-      setAllData({
-        file_doc: file,
-      })
-    }
+
     if (data?.email) {
       setAllData({
         email: data?.email,
@@ -211,7 +207,6 @@ export default function Register() {
           label={label}
           required={required}
           placeholder={placeholder}
-          setValue={setFile}
         />
       )
     }
