@@ -83,7 +83,7 @@ export function isFalsy(value: any): boolean {
 
 export function validateData(
   value: any,
-  message: string = 'Valor não definido'
+  message: string = 'Valor não definido',
 ): string | any {
   if (isFalsy(value)) {
     return message
@@ -145,7 +145,7 @@ export function truncateFileName(name: string): string {
   const nameWithoutExtension = name.substring(0, name.lastIndexOf('.'))
   const truncatedName = nameWithoutExtension.substring(
     0,
-    MAX_FILE_NAME_LENGTH - 3 - (extension?.length || 0)
+    MAX_FILE_NAME_LENGTH - 3 - (extension?.length || 0),
   )
   return `${truncatedName}...${extension ? `.${extension}` : ''}`
 }

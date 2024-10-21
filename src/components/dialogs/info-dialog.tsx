@@ -3,16 +3,16 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { useNDAModi } from '@/contexts/step-state';
-import { useSystem } from '@/contexts/useSystem';
+} from '@/components/ui/alert-dialog'
+import { useNDAModi } from '@/contexts/step-state'
+import { useSystem } from '@/contexts/useSystem'
 
 function InfoDialogRoot({
   open,
   children,
 }: {
-  open: boolean;
-  children: React.ReactNode;
+  open: boolean
+  children: React.ReactNode
 }) {
   return (
     <AlertDialog open={open}>
@@ -23,17 +23,17 @@ function InfoDialogRoot({
         <div className="w-full h-full  sm:p-5 p-2">{children}</div>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }
 
 function InfoDialogContainer({
   message,
   children,
 }: {
-  message: string | TrustedHTML | React.ReactNode;
-  children: React.ReactNode;
+  message: string | TrustedHTML | React.ReactNode
+  children: React.ReactNode
 }) {
-  const { theme } = useSystem();
+  const { theme } = useSystem()
   return (
     <>
       <AlertDialogHeader>
@@ -58,7 +58,7 @@ function InfoDialogContainer({
       </AlertDialogHeader>
       <div className="flex items-center gap-2">{children}</div>
     </>
-  );
+  )
 }
 
 function InfoDialogImage({
@@ -66,17 +66,17 @@ function InfoDialogImage({
   sucess,
   warn,
 }: {
-  src?: string;
-  sucess?: boolean;
-  warn?: boolean;
+  src?: string
+  sucess?: boolean
+  warn?: boolean
 }) {
-  const { isOnline } = useNDAModi();
-  const { modiConfig } = useSystem();
-  let source: string;
-  if (src) source = src;
-  else if (warn) source = modiConfig.assets.warnIcon || '/warn.svg';
-  else if (sucess) source = modiConfig.assets.sucessIcon || '/Sucess.svg';
-  else source = modiConfig.assets.errorIcon || '/errorClose.svg';
+  const { isOnline } = useNDAModi()
+  const { modiConfig } = useSystem()
+  let source: string
+  if (src) source = src
+  else if (warn) source = modiConfig.assets.warnIcon || '/warn.svg'
+  else if (sucess) source = modiConfig.assets.sucessIcon || '/Sucess.svg'
+  else source = modiConfig.assets.errorIcon || '/errorClose.svg'
   return (
     <div className="w-full flex items-end justify-center">
       {isOnline && (
@@ -89,7 +89,7 @@ function InfoDialogImage({
         />
       )}
     </div>
-  );
+  )
 }
 
-export { InfoDialogImage, InfoDialogRoot, InfoDialogContainer };
+export { InfoDialogImage, InfoDialogRoot, InfoDialogContainer }

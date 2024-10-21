@@ -72,12 +72,12 @@ export default function ShowData() {
 
     return transformeDataToArray(
       personData,
-      modiConfig.workflowSteps.show_data.data.dataToShow
+      modiConfig.workflowSteps.show_data.data.dataToShow,
     )
   })
 
   const documentName = listDocumentType.find(
-    (item) => item.code === document_class_code
+    (item) => item.code === document_class_code,
   )
 
   const form = useForm()
@@ -115,7 +115,7 @@ export default function ShowData() {
     produtos: Array<{
       check: boolean
       uncheck: boolean
-    }>
+    }>,
   ) {
     for (let i = 0; i < produtos.length; i++) {
       if (produtos[i].check === produtos[i].uncheck) {
@@ -192,7 +192,7 @@ export default function ShowData() {
                       'w-full grid gap-4 items-center justify-between',
                       hasWantConfirmesChecks
                         ? 'grid-cols-[1fr_55px]'
-                        : 'grid-cols-1'
+                        : 'grid-cols-1',
                     )}
                     key={i}
                   >
@@ -221,7 +221,7 @@ export default function ShowData() {
                         <Checkbox
                           className={cn(
                             `w-6 h-6 border-[#D9D9D9]`,
-                            !check && 'opacity-20'
+                            !check && 'opacity-20',
                           )}
                           style={{
                             background: isRedTone(theme.primary)
@@ -245,7 +245,7 @@ export default function ShowData() {
                           }}
                           className={cn(
                             'w-6 h-6 border-[#D9D9D9]',
-                            !uncheck && 'opacity-20'
+                            !uncheck && 'opacity-20',
                           )}
                           checked={uncheck}
                           onCheckedChange={(checked) =>

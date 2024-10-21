@@ -1,7 +1,7 @@
-import updateLocale from 'dayjs/plugin/updateLocale';
-import dayjs from 'dayjs';
-import 'dayjs/locale/pt-br';
-dayjs.extend(updateLocale);
+import updateLocale from 'dayjs/plugin/updateLocale'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+dayjs.extend(updateLocale)
 dayjs.updateLocale('pt-br', {
   weekdaysMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
   weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
@@ -14,4 +14,4 @@ dayjs.updateLocale('pt-br', {
     'Sexta-feira',
     'Sábado',
   ],
-});
+})

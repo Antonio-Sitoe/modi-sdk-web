@@ -98,5 +98,5 @@ export function RootLayout() {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RootLayout />
-  </StrictMode>
+  </StrictMode>,
 )

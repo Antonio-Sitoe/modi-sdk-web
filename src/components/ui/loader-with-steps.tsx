@@ -1,47 +1,47 @@
-'use client';
+'use client'
 
-import { cn } from '@/lib/utils';
-import { useNDAModi } from '@/contexts/step-state';
-import { Button } from './button';
-import { cancelTokenManager } from '@/lib/axios';
-import { useEffect, useState } from 'react';
-import { useSystem } from '@/contexts/useSystem';
+import { cn } from '@/lib/utils'
+import { useNDAModi } from '@/contexts/step-state'
+import { Button } from './button'
+import { cancelTokenManager } from '@/lib/axios'
+import { useEffect, useState } from 'react'
+import { useSystem } from '@/contexts/useSystem'
 
 interface Props {
-  open?: boolean;
-  title?: string;
+  open?: boolean
+  title?: string
 }
 
 function LoaderRoot({
   open,
   children,
 }: {
-  open: boolean;
-  children: React.ReactNode;
+  open: boolean
+  children: React.ReactNode
 }) {
-  const [showCancelButton, setShowCancelButton] = useState(false);
-  const { setIsLoading, isOnline } = useNDAModi();
-  const poweredBy = useSystem()?.modiConfig?.assets?.poweredBy;
-  const companyLogo = useSystem()?.modiConfig?.assets?.logo;
-  const theme = useSystem()?.theme;
+  const [showCancelButton, setShowCancelButton] = useState(false)
+  const { setIsLoading, isOnline } = useNDAModi()
+  const poweredBy = useSystem()?.modiConfig?.assets?.poweredBy
+  const companyLogo = useSystem()?.modiConfig?.assets?.logo
+  const theme = useSystem()?.theme
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: NodeJS.Timeout
     if (open) {
       timer = setTimeout(() => {
-        setShowCancelButton(true);
-      }, 5000); // 5 segundos em milissegundos
+        setShowCancelButton(true)
+      }, 5000) // 5 segundos em milissegundos
     } else {
-      setShowCancelButton(false);
+      setShowCancelButton(false)
     }
 
     return () => {
-      clearTimeout(timer);
-      setShowCancelButton(false);
-    };
-  }, [open]);
+      clearTimeout(timer)
+      setShowCancelButton(false)
+    }
+  }, [open])
 
-  if (!open) return null;
+  if (!open) return null
   return (
     <div className="fixed inset-0 bg-white cursor-wait pointer-events-auto z-1000">
       <div className="loader-container fixed inset-0 flex flex-col h-full justify-center items-center z-100">
@@ -84,8 +84,8 @@ function LoaderRoot({
                 color: theme?.destructive,
               }}
               onClick={() => {
-                cancelTokenManager.cancelAll();
-                setIsLoading({ isLoad: false, title: '' });
+                cancelTokenManager.cancelAll()
+                setIsLoading({ isLoad: false, title: '' })
               }}
             >
               Cancelar
@@ -99,27 +99,22 @@ function LoaderRoot({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function LoadImage({ img }: { img?: string }) {
-  const { isOnline } = useNDAModi();
+  const { isOnline } = useNDAModi()
   return (
     <div className="text-center mx-auto mb-5 sm:hidden flex">
       {isOnline && (
-        <img
-          src={img ? img : '/WarnQuestion.svg'}
-          width={40}
-          height={40}
-          alt=""
-        />
+        <img src={img || '/WarnQuestion.svg'} width={40} height={40} alt="" />
       )}
     </div>
-  );
+  )
 }
 function LoadCheck({ check, title }: { check: boolean; title: string }) {
-  const { isOnline } = useNDAModi();
-  const checkimg = useSystem().modiConfig.assets.check;
+  const { isOnline } = useNDAModi()
+  const checkimg = useSystem().modiConfig.assets.check
 
   return (
     <p className="text-black font-normal flex items-start gap-3">
@@ -137,24 +132,24 @@ function LoadCheck({ check, title }: { check: boolean; title: string }) {
       </div>
       {title}
     </p>
-  );
+  )
 }
 
 function LoadTitle({ children }: { children: string }) {
-  return <h3 className="text-center mb-5">{children}</h3>;
+  return <h3 className="text-center mb-5">{children}</h3>
 }
 
 function Loader({ open, title = 'Carregando dados' }: Props) {
-  const { isLoading } = useNDAModi();
-  const isOpen = isLoading.isLoad || open;
+  const { isLoading } = useNDAModi()
+  const isOpen = isLoading.isLoad || open
   if (isOpen)
     return (
       <LoaderRoot open={isOpen}>
         <LoadImage />
         <LoadTitle>{isLoading.title || title}</LoadTitle>
       </LoaderRoot>
-    );
-  else return null;
+    )
+  else return null
 }
 
-export { LoaderRoot, LoadTitle, LoadCheck, LoadImage, Loader };
+export { LoaderRoot, LoadTitle, LoadCheck, LoadImage, Loader }

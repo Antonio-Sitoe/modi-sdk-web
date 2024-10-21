@@ -19,13 +19,13 @@ const Inputt = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className={cn(
           'flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-ring focus:ring-primary focus:border-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-          className
+          className,
         )}
         ref={ref}
         {...props}
       />
     )
-  }
+  },
 )
 Inputt.displayName = 'Input'
 
@@ -92,7 +92,7 @@ const Input = React.forwardRef<HTMLInputElement, TextFieldProps>(
               variant="link"
               onClick={() => {
                 const currentInput = document.querySelector(
-                  `#${id}`
+                  `#${id}`,
                 ) as HTMLInputElement
                 setShow(false)
                 currentInput?.focus()
@@ -120,7 +120,7 @@ const Input = React.forwardRef<HTMLInputElement, TextFieldProps>(
         {...props}
       />
     )
-  }
+  },
 )
 Input.displayName = 'Input'
 
@@ -200,7 +200,7 @@ const PhoneInput = ({
             variant="link"
             onClick={() => {
               const currentInput = document.querySelector(
-                '#phone-input'
+                '#phone-input',
               ) as HTMLInputElement
               currentInput?.focus()
               handleChange({

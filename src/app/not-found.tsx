@@ -12,5 +12,5 @@ export default function NotFoundSubscriber() {
         </p>
       </div>
     </div>
-  );
+  )
 }

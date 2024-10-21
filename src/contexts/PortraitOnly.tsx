@@ -1,41 +1,41 @@
-'use client';
+'use client'
 
-import { isMobile } from '@/utils/device';
-import { useMediaQuery } from '@mui/material';
-import React, { useEffect, useState, ReactNode, useCallback } from 'react';
-import { useSystem } from './useSystem';
+import { isMobile } from '@/utils/device'
+import { useMediaQuery } from '@mui/material'
+import React, { useEffect, useState, ReactNode, useCallback } from 'react'
+import { useSystem } from './useSystem'
 
 interface PortraitOnlyProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const PortraitOnly: React.FC<PortraitOnlyProps> = ({ children }) => {
-  const isClient = typeof window !== 'undefined';
-  const mobile = useMediaQuery('(max-width: 768px)');
-  const { modiConfig } = useSystem();
-  const [isPortrait, setIsPortrait] = useState(true);
-  const landscape = modiConfig.assets.landscape;
-  const poweredBy = modiConfig.assets.poweredBy;
+  const isClient = typeof window !== 'undefined'
+  const mobile = useMediaQuery('(max-width: 768px)')
+  const { modiConfig } = useSystem()
+  const [isPortrait, setIsPortrait] = useState(true)
+  const landscape = modiConfig.assets.landscape
+  const poweredBy = modiConfig.assets.poweredBy
 
   const checkOrientation = useCallback(() => {
     if (isClient) {
-      setIsPortrait(window.innerHeight > window.innerWidth);
+      setIsPortrait(window.innerHeight > window.innerWidth)
     }
-  }, [isClient]);
+  }, [isClient])
 
   useEffect(() => {
     if (isClient) {
-      checkOrientation();
-      window.addEventListener('resize', checkOrientation);
-      window.addEventListener('orientationchange', checkOrientation);
+      checkOrientation()
+      window.addEventListener('resize', checkOrientation)
+      window.addEventListener('orientationchange', checkOrientation)
 
       // Limpeza dos event listeners quando o componente for desmontado
       return () => {
-        window.removeEventListener('resize', checkOrientation);
-        window.removeEventListener('orientationchange', checkOrientation);
-      };
+        window.removeEventListener('resize', checkOrientation)
+        window.removeEventListener('orientationchange', checkOrientation)
+      }
     }
-  }, [checkOrientation, isClient]);
+  }, [checkOrientation, isClient])
 
   return (
     <>
@@ -61,7 +61,7 @@ const PortraitOnly: React.FC<PortraitOnlyProps> = ({ children }) => {
       </div>
       {children}
     </>
-  );
-};
+  )
+}
 
-export { PortraitOnly };
+export { PortraitOnly }

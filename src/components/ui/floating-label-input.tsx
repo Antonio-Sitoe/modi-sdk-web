@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { cn } from '@/lib/utils';
-import { Inputt } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { X } from 'lucide-react';
+import { cn } from '@/lib/utils'
+import { Inputt } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { X } from 'lucide-react'
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -17,10 +17,10 @@ const FloatingInput = React.forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         {...props}
       />
-    );
+    )
   },
-);
-FloatingInput.displayName = 'FloatingInput';
+)
+FloatingInput.displayName = 'FloatingInput'
 
 const FloatingLabel = React.forwardRef<
   React.ElementRef<typeof Label>,
@@ -35,14 +35,14 @@ const FloatingLabel = React.forwardRef<
       ref={ref}
       {...props}
     />
-  );
-});
-FloatingLabel.displayName = 'FloatingLabel';
+  )
+})
+FloatingLabel.displayName = 'FloatingLabel'
 
 type FloatingLabelInputProps = InputProps & {
-  label?: string;
-  isInterative?: boolean;
-};
+  label?: string
+  isInterative?: boolean
+}
 
 const FloatingLabelInput = React.forwardRef<
   React.ElementRef<typeof FloatingInput>,
@@ -54,14 +54,14 @@ const FloatingLabelInput = React.forwardRef<
         target: {
           value: '',
         },
-      } as React.ChangeEvent<HTMLInputElement>);
+      } as React.ChangeEvent<HTMLInputElement>)
     }
-    const input = document.querySelector('#' + id) as HTMLInputElement;
+    const input = document.querySelector('#' + id) as HTMLInputElement
     if (input) {
-      input?.focus();
-      input.value = '';
+      input?.focus()
+      input.value = ''
     }
-  };
+  }
   return (
     <div className="relative">
       <FloatingInput
@@ -86,8 +86,8 @@ const FloatingLabelInput = React.forwardRef<
         </>
       )}
     </div>
-  );
-});
-FloatingLabelInput.displayName = 'FloatingLabelInput';
+  )
+})
+FloatingLabelInput.displayName = 'FloatingLabelInput'
 
-export { FloatingInput, FloatingLabel, FloatingLabelInput };
+export { FloatingInput, FloatingLabel, FloatingLabelInput }

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const nuitSchema = z
   .string({
@@ -7,14 +7,14 @@ export const nuitSchema = z
   })
 
   .refine(
-    value => {
+    (value) => {
       if (value) {
         // Verifica se o valor tem exatamente 9 dígitos numéricos
-        return /^\d{9}$/.test(value);
+        return /^\d{9}$/.test(value)
       }
-      return true; // Se o NUIT não for fornecido, é considerado válido (por ser opcional)
+      return true // Se o NUIT não for fornecido, é considerado válido (por ser opcional)
     },
     {
       message: 'NUIT deve conter exatamente 9 dígitos numéricos',
     },
-  );
+  )

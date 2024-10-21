@@ -75,7 +75,7 @@ export default function Register() {
         name: field.name,
         required: field.required,
         type: field.type,
-      })) || []
+      })) || [],
   )
 
   const form = useForm<z.infer<typeof schema>>({

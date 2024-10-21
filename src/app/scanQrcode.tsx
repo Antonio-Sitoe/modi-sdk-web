@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-'use client';
+'use client'
 
 import {
   Form,
@@ -7,77 +7,79 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/components/ui/form'
 
-import { simulateAsyncCall } from '@/actions/client';
-import { maskPhone } from '@/utils/general';
+import {
+  simulateAsyncCall,
+  checkQrCodeSdk,
+  getLinkGenerated,
+} from '@/actions/client'
+import { maskPhone, extractToken } from '@/utils/general'
 
 import {
   InfoDialogContainer,
   InfoDialogImage,
   InfoDialogRoot,
-} from '@/components/dialogs/info-dialog';
+} from '@/components/dialogs/info-dialog'
 
 // import logo from '@/assets/logoMode.png';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
-import { PhoneInput } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNDAModi } from '@/contexts/step-state';
-import { useEffect, useRef, useState, useTransition } from 'react';
-import { extractToken } from '@/utils/general';
-import { phoneSchema } from '@/utils/validations/phone';
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { useForm } from 'react-hook-form'
+import { PhoneInput } from '@/components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useNDAModi } from '@/contexts/step-state'
+import { useEffect, useRef, useState, useTransition } from 'react'
+import { phoneSchema } from '@/utils/validations/phone'
 
 import {
   LoaderRoot,
   LoadImage,
   LoadTitle,
-} from '@/components/ui/loader-with-steps';
+} from '@/components/ui/loader-with-steps'
 
-import Countdown from '@/components/ui/countdown';
-import { Skeleton } from '@/components/ui/skeleton';
-import { QRCodeSVG } from 'qrcode.react';
-import { useSystem } from '@/contexts/useSystem';
-import { checkQrCodeSdk, getLinkGenerated } from '@/actions/client';
-import { Typegrapth, TypegrapthH1 } from '@/components/ui/Typography';
-import { useNavigate } from 'react-router-dom';
+import Countdown from '@/components/ui/countdown'
+import { Skeleton } from '@/components/ui/skeleton'
+import { QRCodeSVG } from 'qrcode.react'
+import { useSystem } from '@/contexts/useSystem'
+import { Typegrapth, TypegrapthH1 } from '@/components/ui/Typography'
+import { useNavigate } from 'react-router-dom'
 
-const TIMER = 60;
+const TIMER = 60
 
 const schema = z.object({
   phone: phoneSchema,
-});
+})
 
 export default function ChooseFlowPage() {
-  const router = useNavigate();
-  const timeOutId = useRef<number | NodeJS.Timeout | null>(null);
-  const intervalId = useRef<number | NodeJS.Timeout | null>(null);
-  const { companyId, modiConfig } = useSystem();
+  const router = useNavigate()
+  const timeOutId = useRef<number | NodeJS.Timeout | null>(null)
+  const intervalId = useRef<number | NodeJS.Timeout | null>(null)
+  const { companyId, modiConfig } = useSystem()
 
-  const scanQrcode = modiConfig.workflowSteps.scanQrcode.data;
+  const scanQrcode = modiConfig.workflowSteps.scanQrcode.data
 
-  const { resetAllData } = useNDAModi();
+  const { resetAllData } = useNDAModi()
 
-  const [time, setTime] = useState(0);
-  const [link, setLink] = useState('');
-  const [tellShow, settellShow] = useState(false);
-  const [initTimer, setInitTimer] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isOpenErrorModal, setIsOpenErrorModal] = useState(false);
+  const [time, setTime] = useState(0)
+  const [link, setLink] = useState('')
+  const [tellShow, settellShow] = useState(false)
+  const [initTimer, setInitTimer] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isOpenErrorModal, setIsOpenErrorModal] = useState(false)
 
-  const [isPending, startTransition] = useTransition();
-  const [isSubmittingData, setIsSubmettingData] = useState(false);
-  const [hasRedirectSuccessfuly, sethasRedirectSuccessfuly] = useState(false);
+  const [isPending, startTransition] = useTransition()
+  const [isSubmittingData, setIsSubmettingData] = useState(false)
+  const [hasRedirectSuccessfuly, sethasRedirectSuccessfuly] = useState(false)
 
   const [isLoading, setIsLoading] = useState({
     isLoad: false,
     title: '',
-  });
+  })
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-  });
+  })
 
   function executeFunctionPeriodically(
     asyncFunction: () => Promise<void>,
@@ -86,60 +88,60 @@ export default function ChooseFlowPage() {
     return new Promise((_, reject) => {
       intervalId.current = setInterval(async () => {
         try {
-          await asyncFunction();
+          await asyncFunction()
         } catch (error) {
-          clearInterval(intervalId.current as NodeJS.Timeout); // Para a execução em caso de erro
-          reject(error); // Rejeita a promessa com o erro
+          clearInterval(intervalId.current as NodeJS.Timeout) // Para a execução em caso de erro
+          reject(error) // Rejeita a promessa com o erro
         }
-      }, interval);
+      }, interval)
 
       timeOutId.current = setTimeout(
         () => {
-          clearInterval(intervalId.current as NodeJS.Timeout);
+          clearInterval(intervalId.current as NodeJS.Timeout)
         },
         15 * 60 * 1000, // 15 MINUTOS
-      );
-    });
+      )
+    })
   }
 
   async function onSubmit({ phone }: z.infer<typeof schema>) {
-    clearInterval(intervalId.current as NodeJS.Timeout);
-    setIsSubmettingData(true);
+    clearInterval(intervalId.current as NodeJS.Timeout)
+    setIsSubmettingData(true)
     const { data, error, message } = await getLinkGenerated({
       companyId,
       contact: phone,
       config: modiConfig.apiEndpoints.sendToken,
-    });
+    })
     if (error) {
-      setErrorMessage(message);
-      setIsSubmettingData(false);
-      setIsOpenErrorModal(true);
-      return;
+      setErrorMessage(message)
+      setIsSubmettingData(false)
+      setIsOpenErrorModal(true)
+      return
     }
 
     if (data) {
-      setInitTimer(true);
-      setTime(TIMER);
-      setLink(data.data.link);
+      setInitTimer(true)
+      setTime(TIMER)
+      setLink(data.data.link)
       await executeFunctionPeriodically(() =>
         checkIsQrcodeWasScanned({
           token_url: data.data.token,
           url: modiConfig.apiEndpoints.checkQrcode,
         }),
-      );
+      )
     }
   }
 
   async function getLink(
     companyId: string,
     config: {
-      url: string;
-      token: string;
+      url: string
+      token: string
     },
   ) {
-    const { data } = await getLinkGenerated({ companyId, config });
+    const { data } = await getLinkGenerated({ companyId, config })
     if (data) {
-      setLink(data.data.link);
+      setLink(data.data.link)
     }
   }
 
@@ -147,50 +149,50 @@ export default function ChooseFlowPage() {
     token_url,
     url,
   }: {
-    token_url: string;
+    token_url: string
     url: {
-      url: string;
-      token: string;
-    };
+      url: string
+      token: string
+    }
   }) {
     const { data } = await checkQrCodeSdk<{
-      status_code: number;
-    }>(token_url, url);
-    console.log('[QRCODE WAS SCANNED] ', data);
+      status_code: number
+    }>(token_url, url)
+    console.log('[QRCODE WAS SCANNED] ', data)
     if (data?.status_code === 200) {
-      clearInterval(intervalId.current as NodeJS.Timeout);
+      clearInterval(intervalId.current as NodeJS.Timeout)
       if (timeOutId.current) {
-        clearTimeout(timeOutId.current);
+        clearTimeout(timeOutId.current)
       }
       setIsLoading({
         isLoad: true,
         title: 'Enviando o subscritor para outro dispositivo',
-      });
-      sethasRedirectSuccessfuly(true);
-      await simulateAsyncCall(false);
-      console.log('[ACABOU AQUI NO PC]', timeOutId.current);
+      })
+      sethasRedirectSuccessfuly(true)
+      await simulateAsyncCall(false)
+      console.log('[ACABOU AQUI NO PC]', timeOutId.current)
       setIsLoading({
         isLoad: false,
         title: 'Enviando o subscritor para outro dispositivo',
-      });
+      })
     }
   }
 
   useEffect(() => {
     if (time === 0) {
-      setIsSubmettingData(false);
+      setIsSubmettingData(false)
     }
-  }, [time]);
+  }, [time])
 
   useEffect(() => {
     startTransition(
       // @ts-ignore
       async () => await getLink(companyId, modiConfig?.apiEndpoints?.sendToken),
-    );
+    )
     return () => {
-      clearInterval(intervalId.current as NodeJS.Timeout);
-    };
-  }, [companyId, modiConfig.apiEndpoints.sendToken]);
+      clearInterval(intervalId.current as NodeJS.Timeout)
+    }
+  }, [companyId, modiConfig.apiEndpoints.sendToken])
 
   useEffect(() => {
     if (link) {
@@ -201,32 +203,32 @@ export default function ChooseFlowPage() {
             url: modiConfig.apiEndpoints.checkQrcode,
           }),
         5000,
-      );
+      )
     }
     return () => {
-      clearInterval(intervalId.current as NodeJS.Timeout);
+      clearInterval(intervalId.current as NodeJS.Timeout)
       if (timeOutId.current) {
-        clearTimeout(timeOutId.current);
-        timeOutId.current = null;
+        clearTimeout(timeOutId.current)
+        timeOutId.current = null
       }
-    };
-  }, [link, modiConfig.apiEndpoints.checkQrcode]);
+    }
+  }, [link, modiConfig.apiEndpoints.checkQrcode])
 
   function generateNewQrcode() {
     startTransition(
       // @ts-ignore
       async () => await getLink(companyId, modiConfig.apiEndpoints.sendToken),
-    );
-    form.setValue('phone', '');
-    setTime(0);
-    settellShow(false);
-    setInitTimer(false);
-    sethasRedirectSuccessfuly(false);
+    )
+    form.setValue('phone', '')
+    setTime(0)
+    settellShow(false)
+    setInitTimer(false)
+    sethasRedirectSuccessfuly(false)
   }
 
   function handleGotoHome() {
-    resetAllData();
-    router(`/?companyId=${companyId}`);
+    resetAllData()
+    router(`/?companyId=${companyId}`)
   }
 
   if (hasRedirectSuccessfuly) {
@@ -280,7 +282,7 @@ export default function ChooseFlowPage() {
           </div>
         </div>
       </main>
-    );
+    )
   }
 
   return (
@@ -353,10 +355,10 @@ export default function ChooseFlowPage() {
                         }
                         error={!!form.formState.errors?.phone}
                         phone={field.value || ''}
-                        handleChange={event => {
-                          form.clearErrors('phone');
-                          const rawValue = maskPhone(event.target.value);
-                          field.onChange(rawValue);
+                        handleChange={(event) => {
+                          form.clearErrors('phone')
+                          const rawValue = maskPhone(event.target.value)
+                          field.onChange(rawValue)
                         }}
                       />
                     </FormControl>
@@ -399,7 +401,7 @@ export default function ChooseFlowPage() {
           <Button
             className="w-full"
             onClick={() => {
-              setIsOpenErrorModal(false);
+              setIsOpenErrorModal(false)
             }}
           >
             Tentar novamente
@@ -412,5 +414,5 @@ export default function ChooseFlowPage() {
         <LoadTitle>{isLoading.title}</LoadTitle>
       </LoaderRoot>
     </main>
-  );
+  )
 }

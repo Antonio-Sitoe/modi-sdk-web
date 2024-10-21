@@ -1,23 +1,23 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { useNDAModi } from '@/contexts/step-state';
-import { useSystem } from '@/contexts/useSystem';
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { useNDAModi } from '@/contexts/step-state'
+import { useSystem } from '@/contexts/useSystem'
 
-import { TypegrapthH1, Typegrapth } from '../ui/Typography';
+import { TypegrapthH1, Typegrapth } from '../ui/Typography'
 
 interface WarnDialogProps {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function WarnDialog({ isOpen, setIsOpen }: WarnDialogProps) {
   function handleClose() {
-    setIsOpen(false);
+    setIsOpen(false)
   }
-  const { modiConfig } = useSystem();
-  const { isOnline } = useNDAModi();
+  const { modiConfig } = useSystem()
+  const { isOnline } = useNDAModi()
 
   return (
     <Dialog open={isOpen}>
@@ -71,5 +71,5 @@ export function WarnDialog({ isOpen, setIsOpen }: WarnDialogProps) {
         </Button>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

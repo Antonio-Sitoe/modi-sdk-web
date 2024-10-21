@@ -1,16 +1,16 @@
 export type TypeTheme = {
-  border: string;
-  textAlt: string;
-  text: string;
-  input: string;
-  ring: string;
-  sucess: string;
-  disable: string;
-  background: string;
-  foreground: string;
-  primary: string;
-  destructive: string;
-};
+  border: string
+  textAlt: string
+  text: string
+  input: string
+  ring: string
+  sucess: string
+  disable: string
+  background: string
+  foreground: string
+  primary: string
+  destructive: string
+}
 
 export const useTheme = (theme: TypeTheme) => {
   return {
@@ -25,5 +25,5 @@ export const useTheme = (theme: TypeTheme) => {
     foreground: theme?.foreground || '#FFFFFF', // substituindo `hsl(var(--foreground))` por branco
     primary: theme?.primary || '#72B84A', // verde claro para a cor primária
     destructive: theme?.destructive || '#E21717', // vermelho para ações destrutivas
-  };
-};
+  }
+}

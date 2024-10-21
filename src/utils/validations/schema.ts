@@ -24,7 +24,7 @@ export function CreateSchema(
     name: string
     required: boolean
     type: Type
-  }>
+  }>,
 ) {
   const objectSchema = {}
   console.log('formFields', formFields)

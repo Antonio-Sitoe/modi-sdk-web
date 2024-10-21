@@ -1,18 +1,18 @@
-import { useSystem } from '@/contexts/useSystem';
-import { cn } from '@/lib/utils';
-import React, { CSSProperties } from 'react';
+import { useSystem } from '@/contexts/useSystem'
+import { cn } from '@/lib/utils'
+import React, { CSSProperties } from 'react'
 
 // Tipagem para os props do componente Typegrapth
 interface TypegrapthProps {
-  text: string;
-  className?: string;
-  style?: CSSProperties;
+  text: string
+  className?: string
+  style?: CSSProperties
 }
 
 // Tipagem para os props do componente TypegrapthH1
 interface TypegrapthH1Props {
-  text: string;
-  className?: string;
+  text: string
+  className?: string
 }
 
 function Typegrapth({ text, className, style }: TypegrapthProps) {
@@ -20,11 +20,11 @@ function Typegrapth({ text, className, style }: TypegrapthProps) {
     <p style={style} className={className}>
       {text}
     </p>
-  );
+  )
 }
 
 function TypegrapthH1({ text, className }: TypegrapthH1Props) {
-  const { theme } = useSystem();
+  const { theme } = useSystem()
   return (
     <h1
       style={{
@@ -34,7 +34,7 @@ function TypegrapthH1({ text, className }: TypegrapthH1Props) {
     >
       {text}
     </h1>
-  );
+  )
 }
 
-export { Typegrapth, TypegrapthH1 };
+export { Typegrapth, TypegrapthH1 }

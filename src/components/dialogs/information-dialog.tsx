@@ -3,11 +3,11 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from '@/components/ui/alert-dialog'
 
-import { Button } from '../ui/button';
-import { useNDAModi } from '@/contexts/step-state';
-import { useSystem } from '@/contexts/useSystem';
+import { Button } from '../ui/button'
+import { useNDAModi } from '@/contexts/step-state'
+import { useSystem } from '@/contexts/useSystem'
 
 function InforMationDialog({
   open,
@@ -16,17 +16,17 @@ function InforMationDialog({
   sucess,
   warn,
 }: {
-  open: boolean;
-  sucess: boolean;
-  message: string;
-  warn?: boolean;
+  open: boolean
+  sucess: boolean
+  message: string
+  warn?: boolean
   btn: {
-    action: () => void;
-    text: string;
-  };
+    action: () => void
+    text: string
+  }
 }) {
-  const { modiConfig, theme } = useSystem();
-  const { isOnline } = useNDAModi();
+  const { modiConfig, theme } = useSystem()
+  const { isOnline } = useNDAModi()
   return (
     <AlertDialog open={open}>
       <AlertDialogContent className="bg-white border-none px-2 w-11/12 sm:w-full rounded-md">
@@ -68,7 +68,7 @@ function InforMationDialog({
         </div>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }
 
-export { InforMationDialog };
+export { InforMationDialog }

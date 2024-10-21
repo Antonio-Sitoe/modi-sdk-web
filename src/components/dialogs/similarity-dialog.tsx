@@ -1,27 +1,27 @@
-import React from 'react';
+import React from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/components/ui/dialog'
 
-import { Button } from '@/components/ui/button';
-import { getImageSrc } from '@/utils/general';
-import { useNDAModi } from '@/contexts/step-state';
-import { useSystem } from '@/contexts/useSystem';
+import { Button } from '@/components/ui/button'
+import { getImageSrc } from '@/utils/general'
+import { useNDAModi } from '@/contexts/step-state'
+import { useSystem } from '@/contexts/useSystem'
 
 export function SimilarityDialog({
   open,
   action,
 }: {
-  open: boolean;
-  action: () => void;
+  open: boolean
+  action: () => void
 }) {
-  const { personData } = useNDAModi();
-  const { modiConfig, theme } = useSystem();
-  const { portraitImage64, selfieBase64, similarity } = personData;
-  const isError = similarity <= 65;
+  const { personData } = useNDAModi()
+  const { modiConfig, theme } = useSystem()
+  const { portraitImage64, selfieBase64, similarity } = personData
+  const isError = similarity <= 65
 
   return (
     <div>
@@ -110,5 +110,5 @@ export function SimilarityDialog({
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

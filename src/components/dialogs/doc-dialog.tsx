@@ -1,11 +1,11 @@
-import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useNDAModi } from '@/contexts/step-state';
-import { z } from 'zod';
+import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useNDAModi } from '@/contexts/step-state'
+import { z } from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 
 import {
   Form,
@@ -14,41 +14,41 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/components/ui/form'
 
-import { useSystem } from '@/contexts/useSystem';
-import { TypegrapthH1 } from '../ui/Typography';
+import { useSystem } from '@/contexts/useSystem'
+import { TypegrapthH1 } from '../ui/Typography'
 
 const FormSchema = z.object({
   type: z.enum(['1', '2', '3'], {
     required_error: 'Selecione o documento',
   }),
-});
+})
 
 export function DocumentDialog({
   isOpen,
   setIsOpen,
 }: {
-  isOpen: boolean;
-  cancel: () => void;
-  setIsOpen: (a: boolean) => void;
+  isOpen: boolean
+  cancel: () => void
+  setIsOpen: (a: boolean) => void
 }) {
-  const documentTypeList = useSystem().modiConfig.document_type;
-  const { setDocumentTypeId } = useNDAModi();
-  const { previousPage, modiConfig } = useSystem();
+  const documentTypeList = useSystem().modiConfig.document_type
+  const { setDocumentTypeId } = useNDAModi()
+  const { previousPage, modiConfig } = useSystem()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       type: '1',
     },
-  });
+  })
 
   function handleClose() {
-    setIsOpen(false);
+    setIsOpen(false)
   }
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    setDocumentTypeId(data.type);
+    setDocumentTypeId(data.type)
   }
   return (
     <Dialog open={isOpen}>
@@ -105,7 +105,7 @@ export function DocumentDialog({
                                 {name}
                               </FormLabel>
                             </FormItem>
-                          );
+                          )
                         })}
                       </RadioGroup>
                     </FormControl>
@@ -120,10 +120,10 @@ export function DocumentDialog({
                 variant="outline"
                 className="font-montSerrat font-medium"
                 onClick={() => {
-                  previousPage();
+                  previousPage()
                 }}
                 onTouchEnd={() => {
-                  previousPage();
+                  previousPage()
                 }}
                 type="button"
               >
@@ -143,5 +143,5 @@ export function DocumentDialog({
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

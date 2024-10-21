@@ -12,5 +12,5 @@ export const fileSchema = z
     },
     {
       message: 'Apenas arquivos .pdf, .doc e .docx são aceitos.',
-    }
+    },
   )

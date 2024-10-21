@@ -22,7 +22,7 @@ export function useSubscriber() {
 
   async function extractSubscriberData(
     subscriberData: DocumentProps,
-    hasSubscriberFoundend: boolean
+    hasSubscriberFoundend: boolean,
   ): Promise<{
     nutelfound: boolean
     nutelnotfound: boolean
@@ -37,7 +37,7 @@ export function useSubscriber() {
           name,
           birth_date,
           hasSubscriberFoundend,
-          personData.phone_number
+          personData.phone_number,
         )
       } else {
         return checkWithoutBpin()
@@ -49,7 +49,7 @@ export function useSubscriber() {
           name,
           birth_date,
           hasSubscriberFoundend,
-          personData.phone_number
+          personData.phone_number,
         )
       } else {
         return checkWithoutBpin()
@@ -70,13 +70,13 @@ export function useSubscriber() {
     name: string,
     birth_date: string,
     scanWidthoutOcr: boolean,
-    phone_number: string
+    phone_number: string,
   ) {
     const response = await verifyPhoneSubscriber(
       name,
       birth_date,
       scanWidthoutOcr,
-      phone_number
+      phone_number,
     )
     return response
   }
@@ -91,13 +91,13 @@ export function useSubscriber() {
     name: string,
     birth_date: string,
     scanWidthoutOcr: boolean,
-    phone_number: string
+    phone_number: string,
   ) {
     const responsebpn = await CheckSubscriberBpin<IApiResponseBpin>({
       birthday: format(birth_date, 'dd-MM-yyyy'),
       cell_number: phone_number,
       config: modiConfig.apiEndpoints.bpin,
-      name: name,
+      name,
     })
     const response = {
       nutelfound: false,

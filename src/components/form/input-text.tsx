@@ -200,7 +200,13 @@ export function InputPickerDate({
                 name={name}
                 label={label}
                 onChange={(
-                  event: string | number | Date | dayjs.Dayjs | null | undefined
+                  event:
+                    | string
+                    | number
+                    | Date
+                    | dayjs.Dayjs
+                    | null
+                    | undefined,
                 ) => {
                   try {
                     setAllData({

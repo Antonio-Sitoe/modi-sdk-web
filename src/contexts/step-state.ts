@@ -237,7 +237,7 @@ export const useNDAModi = create<INDAPROPS>()((set) => ({
     set((state) => ({
       personData: {
         ...state.personData,
-        similarity: similarity,
+        similarity,
       },
     })),
 

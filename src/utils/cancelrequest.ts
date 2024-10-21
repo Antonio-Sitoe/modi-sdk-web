@@ -1,20 +1,20 @@
-import axios, { CancelTokenSource } from 'axios';
+import axios, { CancelTokenSource } from 'axios'
 
 class CancelTokenManager {
-  private sources: CancelTokenSource[] = [];
+  private sources: CancelTokenSource[] = []
 
   createToken() {
-    const source = axios.CancelToken.source();
-    this.sources.push(source);
-    return source.token;
+    const source = axios.CancelToken.source()
+    this.sources.push(source)
+    return source.token
   }
 
   cancelAll() {
-    this.sources.forEach(source => source.cancel('Operação Cancelada'));
-    this.sources = [];
+    this.sources.forEach((source) => source.cancel('Operação Cancelada'))
+    this.sources = []
   }
 }
 
-const Cancelable = new CancelTokenManager();
+const Cancelable = new CancelTokenManager()
 
-export default Cancelable;
+export default Cancelable

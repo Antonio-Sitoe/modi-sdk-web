@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
-import * as React from 'react';
-import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import * as React from 'react'
+import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
@@ -17,13 +17,11 @@ const Checkbox = React.forwardRef<
     )}
     {...props}
   >
-    <div
-      className={cn('flex items-center justify-center text-current')}
-    >
+    <div className={cn('flex items-center justify-center text-current')}>
       {children}
     </div>
   </CheckboxPrimitive.Root>
-));
-Checkbox.displayName = CheckboxPrimitive.Root.displayName;
+))
+Checkbox.displayName = CheckboxPrimitive.Root.displayName
 
-export { Checkbox };
+export { Checkbox }
