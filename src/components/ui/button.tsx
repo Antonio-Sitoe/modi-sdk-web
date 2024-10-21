@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react'
+import { Slot } from '@radix-ui/react-slot'
+import { cva, type VariantProps } from 'class-variance-authority'
 
-import { cn } from '@/lib/utils';
-import { useNDAModi } from '@/contexts/step-state';
-import { useSystem } from '@/contexts/useSystem';
-import { TypeTheme } from '@/contexts/useTheme';
+import { cn } from '@/lib/utils'
+import { useNDAModi } from '@/contexts/step-state'
+import { useSystem } from '@/contexts/useSystem'
+import { TypeTheme } from '@/contexts/useTheme'
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const buttonVariants = cva(
@@ -32,8 +32,8 @@ export const buttonVariants = cva(
       variant: 'default',
       size: 'default',
     },
-  },
-);
+  }
+)
 
 const variantStyle = (theme: TypeTheme) => {
   return {
@@ -52,13 +52,13 @@ const variantStyle = (theme: TypeTheme) => {
     link: {
       color: theme.primary,
     },
-  };
-};
+  }
+}
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+  asChild?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -72,25 +72,30 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       ...props
     },
-    ref,
+    ref
   ) => {
-    const Comp = asChild ? Slot : 'button';
-    const { isOnline } = useNDAModi();
-    const { theme } = useSystem();
+    const Comp = asChild ? Slot : 'button'
+    const { isOnline } = useNDAModi()
+    const { theme } = useSystem()
+    const [isRendered, setIsRendered] = React.useState(false)
+
+    React.useEffect(() => {
+      setIsRendered(true)
+    }, [])
     // @ts-ignore
-    let defaultStyle = variantStyle(theme)[variant];
-    defaultStyle = !defaultStyle ? {} : defaultStyle;
+    let defaultStyle = variantStyle(theme)[variant]
+    defaultStyle = !defaultStyle ? {} : defaultStyle
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        disabled={disabled || isOnline === false}
+        disabled={disabled || isOnline === false || isRendered === false}
         style={{ ...defaultStyle, ...style }}
         {...props}
       />
-    );
-  },
-);
-Button.displayName = 'Button';
+    )
+  }
+)
+Button.displayName = 'Button'
 
-export { Button };
+export { Button }

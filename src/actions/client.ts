@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import axios, { AxiosError } from 'axios';
 import { netErrorConections } from '@/utils/net-conexions';
 import { FaceMatchResult } from '@/@types/interfaces';

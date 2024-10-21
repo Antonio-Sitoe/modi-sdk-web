@@ -232,13 +232,13 @@ export default function Register() {
           </h1>
         </div>
 
-        <div className="grid gap-4 mt-8 h-full" ref={animationParent}>
+        <div className="grid gap-4 mt-6 h-full" ref={animationParent}>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="h-full flex flex-col justify-between"
             >
-              <div className="grid gap-6">
+              <div className="grid gap-4">
                 {formFields?.map((field, index) => renderInput(field, index))}
               </div>
 

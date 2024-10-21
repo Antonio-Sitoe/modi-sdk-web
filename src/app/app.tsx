@@ -68,7 +68,7 @@ export default function Home() {
         })}
       </div>
       {button.label && (
-        <div className="grid gap-4 mt-7 items-end w-full">
+        <div className="grid gap-4 mt-7 items-end w-full border">
           <Button
             variant="default"
             type="button"
