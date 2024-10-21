@@ -1,33 +1,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { useSystem } from '@/contexts/useSystem';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Typegrapth, TypegrapthH1 } from '@/components/ui/Typography';
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { useSystem } from '@/contexts/useSystem'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Typegrapth, TypegrapthH1 } from '@/components/ui/Typography'
 
 export default function Home() {
-  const { modiConfig, companyId, nextPage, theme } = useSystem();
-  const navigate = useNavigate(); // Substituição do useRouter
+  const { modiConfig, companyId, nextPage, theme } = useSystem()
+  const navigate = useNavigate() // Substituição do useRouter
 
   const { info, button, buttonRedirect, title } =
-    modiConfig.workflowSteps.initial.data;
+    modiConfig.workflowSteps.initial.data
 
-  const isQrcodeRequired = modiConfig.workflowSteps.scanQrcode.active;
+  const isQrcodeRequired = modiConfig.workflowSteps.scanQrcode.active
 
   async function handleRedirect() {
-    navigate(`/${companyId}/scanQrcode`); // Usando navigate para redirecionamento
+    navigate(`/${companyId}/scanQrcode`) // Usando navigate para redirecionamento
   }
 
   function getInitSubscriber() {
-    nextPage();
+    nextPage()
   }
 
   useEffect(() => {
     if (modiConfig.workflowSteps.initial.required === false) {
-      nextPage();
+      nextPage()
     }
-  }, []);
+  }, [])
 
   return (
     <main className="max-w-lg m-auto px-4 py-16 sm:py-20 h-dvh flex flex-col items-start justify-between">
@@ -53,7 +53,6 @@ export default function Home() {
                 <div className="pl-14">
                   <Button
                     onClick={handleRedirect}
-                    onTouchEnd={handleRedirect}
                     style={{
                       color: theme.primary,
                     }}
@@ -65,7 +64,7 @@ export default function Home() {
                 </div>
               )}
             </div>
-          );
+          )
         })}
       </div>
       {button.label && (
@@ -82,5 +81,5 @@ export default function Home() {
         </div>
       )}
     </main>
-  );
+  )
 }

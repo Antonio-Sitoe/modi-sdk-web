@@ -247,9 +247,6 @@ export default function Register() {
                   variant="outline"
                   type="button"
                   className="font-montSerrat"
-                  onTouchEnd={() => {
-                    previousPage()
-                  }}
                   onClick={() => {
                     previousPage()
                   }}

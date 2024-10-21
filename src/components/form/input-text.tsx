@@ -108,6 +108,7 @@ export function InputDocs({
   form,
   name,
   required,
+  label,
 }: {
   name: string
   placeholder: string
@@ -137,7 +138,7 @@ export function InputDocs({
                 htmlFor="file"
                 className="text-sm font-medium text-gray-700"
               >
-                Selecione um arquivo
+                {label}
               </Label>
               <div className="grid items-center gap-2">
                 <Button
