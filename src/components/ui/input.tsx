@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -11,8 +10,7 @@ import { DatePicker } from '@mui/x-date-pickers'
 import { Button } from './button'
 import { useSystem } from '@/contexts/useSystem'
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const Inputt = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {

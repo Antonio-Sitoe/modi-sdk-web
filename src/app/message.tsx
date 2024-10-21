@@ -1,27 +1,26 @@
-'use client';
+'use client'
 
-import { useSystem } from '@/contexts/useSystem';
-import { Button } from '@/components/ui/button';
-import { useEffect } from 'react';
-import { Typegrapth } from '@/components/ui/Typography';
+import { useSystem } from '@/contexts/useSystem'
+import { Button } from '@/components/ui/button'
+import { useEffect } from 'react'
+import { Typegrapth } from '@/components/ui/Typography'
 
 function Message() {
-  const { modiConfig } = useSystem();
+  const { modiConfig } = useSystem()
 
   function handleGoBack() {
     if (modiConfig.autoClose) {
-      window.close();
+      window.close()
     } else {
-      window.location.href = modiConfig.redirectUrl;
+      window.location.href = modiConfig.redirectUrl
     }
   }
 
   useEffect(() => {
     if (modiConfig.workflowSteps.message.required === false) {
-      window.close();
+      window.close()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   return (
     <main className="max-w-lg m-auto px-4 py-16 sm:py-20 h-dvh">
@@ -57,7 +56,7 @@ function Message() {
         </div>
       </div>
     </main>
-  );
+  )
 }
 
-export default Message;
+export default Message

@@ -1,57 +1,56 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+'use client'
 
 import {
   LoadCheck,
   LoaderRoot,
   LoadImage,
   LoadTitle,
-} from '@/components/ui/loader-with-steps';
+} from '@/components/ui/loader-with-steps'
 
 import {
   InfoDialogContainer,
   InfoDialogImage,
   InfoDialogRoot,
-} from '@/components/dialogs/info-dialog';
+} from '@/components/dialogs/info-dialog'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 
-import { useSystem } from '@/contexts/useSystem';
-import { livenessFn } from '@/utils/liveness';
-import { useNDAModi } from '@/contexts/step-state';
-import { AxiosError } from 'axios';
-import { BASE64toBLOB } from '@/utils/general';
-import { scanFaceMatch, search_person, Subscriber } from '@/actions/client';
-import { useMediaQuery } from '@mui/material';
-import { useSubscriber } from '@/contexts/useSubscriber';
-import { DocumentProps } from '@/@types/interfaces';
-import { HasCompleteProcess } from '@/components/ui/hasComplete';
-import { useCallback, useEffect, useState } from 'react';
-import { convertToFormData } from '@/utils/person-data-convertion';
-import { SimilarityDialog } from '@/components/dialogs/similarity-dialog';
-import { Typegrapth } from '@/components/ui/Typography';
-import { useNavigate } from 'react-router-dom';
+import { useSystem } from '@/contexts/useSystem'
+import { livenessFn } from '@/utils/liveness'
+import { useNDAModi } from '@/contexts/step-state'
+import { AxiosError } from 'axios'
+import { BASE64toBLOB } from '@/utils/general'
+import { scanFaceMatch, search_person, Subscriber } from '@/actions/client'
+import { useMediaQuery } from '@mui/material'
+import { useSubscriber } from '@/contexts/useSubscriber'
+import { DocumentProps } from '@/@types/interfaces'
+import { HasCompleteProcess } from '@/components/ui/hasComplete'
+import { useCallback, useEffect, useState } from 'react'
+import { convertToFormData } from '@/utils/person-data-convertion'
+import { SimilarityDialog } from '@/components/dialogs/similarity-dialog'
+import { Typegrapth } from '@/components/ui/Typography'
+import { useNavigate } from 'react-router-dom'
 
 export default function FaceRecogntianLiveness() {
-  const router = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [isModalOtherDevice, setModalOtherDevice] = useState(false);
-  const [isOpenLoungModal, setisOpenLoungModal] = useState(false);
-  const [hasAlreadyData, setHasAlreadyData] = useState(false);
-  const [showDialog, setShowDialog] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const router = useNavigate()
+  const [isOpen, setIsOpen] = useState(false)
+  const [message, setMessage] = useState('')
+  const [isModalOtherDevice, setModalOtherDevice] = useState(false)
+  const [isOpenLoungModal, setisOpenLoungModal] = useState(false)
+  const [hasAlreadyData, setHasAlreadyData] = useState(false)
+  const [showDialog, setShowDialog] = useState(false)
+  const [isError, setIsError] = useState(false)
 
-  const { modiConfig, companyId, nextPage, theme, previousPage } = useSystem();
-  const { extractSubscriberData } = useSubscriber();
+  const { modiConfig, companyId, nextPage, theme, previousPage } = useSystem()
+  const { extractSubscriberData } = useSubscriber()
 
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const search_person_url = modiConfig.apiEndpoints.search_person;
-  const sendDataUrl = modiConfig.apiEndpoints.sendData;
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  const search_person_url = modiConfig.apiEndpoints.search_person
+  const sendDataUrl = modiConfig.apiEndpoints.sendData
   const livenessType =
-    modiConfig.workflowSteps.liveness.data.livenessType || '2';
+    modiConfig.workflowSteps.liveness.data.livenessType || '2'
 
   const {
     setSelfie,
@@ -64,7 +63,7 @@ export default function FaceRecogntianLiveness() {
     personData,
     setHasCompletOCR,
     setSimilarity,
-  } = useNDAModi();
+  } = useNDAModi()
 
   const [isLoading, setIsLoading] = useState({
     open: false,
@@ -77,55 +76,55 @@ export default function FaceRecogntianLiveness() {
       isTrue: false,
       text: 'Pesquisando a cara',
     },
-  });
+  })
 
   async function onSubmit() {
-    setIsLoadingFn({ title: 'Submetendo os dados', isLoad: true });
-    const formdata = convertToFormData(personData);
+    setIsLoadingFn({ title: 'Submetendo os dados', isLoad: true })
+    const formdata = convertToFormData(personData)
     const {
       data: dataResponse,
       error,
       message,
-    } = await Subscriber(formdata, sendDataUrl);
+    } = await Subscriber(formdata, sendDataUrl)
 
     if (dataResponse) {
-      router(`/${companyId}/message`);
-      await new Promise(resolve => {
+      router(`/${companyId}/message`)
+      await new Promise((resolve) => {
         setTimeout(() => {
-          resolve('');
-        }, 1000);
-      });
+          resolve('')
+        }, 1000)
+      })
     }
     if (error) {
-      setMessage(message);
-      setIsOpen(true);
+      setMessage(message)
+      setIsOpen(true)
     }
-    setShowDialog(false);
-    setIsLoadingFn({ title: 'Submetendo os dados', isLoad: false });
+    setShowDialog(false)
+    setIsLoadingFn({ title: 'Submetendo os dados', isLoad: false })
   }
 
   function redirectHome() {
-    router(`/${companyId}`);
-    resetAllData();
-    setHasCompletLiveness(false);
-    setHasCompletOCR(false); // a pessoa ja fez OCR
-    setShowDialog(false);
+    router(`/${companyId}`)
+    resetAllData()
+    setHasCompletLiveness(false)
+    setHasCompletOCR(false)
+    setShowDialog(false)
   }
 
   async function actionsSimilarity() {
     if (isError) {
-      return redirectHome;
+      return redirectHome
     } else if (modiConfig.workflowSteps.show_data.required) {
-      return nextPage();
+      return nextPage()
     } else {
-      return await onSubmit();
+      return await onSubmit()
     }
   }
 
   async function handleErrorCatch(
     error: AxiosError,
     selfie: Blob,
-    message: string | null,
+    message: string | null
   ) {
     if (error instanceof AxiosError && error.response?.status === 404) {
       if (
@@ -139,118 +138,118 @@ export default function FaceRecogntianLiveness() {
           portrait: personData.portrait,
           selfie,
           config: modiConfig.apiEndpoints.scan_face,
-        });
-        console.log({ data, message });
+        })
+        console.log({ data, message })
         if (error) {
-          setIsError(true);
+          setIsError(true)
         }
         if (data) {
-          const similarityDetail = data?.data.moreDetails1[0].similarity;
+          const similarityDetail = data?.data.moreDetails1[0].similarity
           const parsedSimilarity = isNaN(Number(similarityDetail))
             ? 0
-            : Number(similarityDetail);
-          const similarity = parseFloat((parsedSimilarity * 100).toFixed(2));
+            : Number(similarityDetail)
+          const similarity = parseFloat((parsedSimilarity * 100).toFixed(2))
 
-          setSimilarity(similarity);
+          setSimilarity(similarity)
           if (similarity >= 65) {
-            console.log('Funciona', similarity);
-            setIsError(false);
+            console.log('Funciona', similarity)
+            setIsError(false)
           } else {
-            console.log('NAO Funciona', similarity);
-            setIsError(true);
+            console.log('NAO Funciona', similarity)
+            setIsError(true)
           }
         }
-        setShowDialog(true);
+        setShowDialog(true)
       } else {
-        const page = nextPage();
+        const page = nextPage()
         if (page === null) {
-          router(`/${companyId}/message`);
+          router(`/${companyId}/message`)
         }
-        console.log('[Erro na requisicao]', error.response?.status);
-        await new Promise(resolve => {
+        console.log('[Erro na requisicao]', error.response?.status)
+        await new Promise((resolve) => {
           setTimeout(() => {
-            setHasCompletLiveness(true);
-            resolve('Face capturada com sucesso.');
-          }, 2000);
-        });
+            setHasCompletLiveness(true)
+            resolve('Face capturada com sucesso.')
+          }, 2000)
+        })
       }
     } else {
       setMessage(
         message ||
-          'No momento, não é possível realizar a pesquisa solicitada. Por favor, tente novamente mais tarde.',
-      );
-      setisOpenLoungModal(true);
+          'No momento, não é possível realizar a pesquisa solicitada. Por favor, tente novamente mais tarde.'
+      )
+      setisOpenLoungModal(true)
     }
   }
 
   async function handleSubscriberFounded(data: DocumentProps) {
-    setMessage('');
-    console.log('DADOS PROVENIENTES DO LIVENESS', data);
+    setMessage('')
+    console.log('DADOS PROVENIENTES DO LIVENESS', data)
 
     const { nutelfound, nutelnotfound, validcredencials, withoutBpin } =
-      await extractSubscriberData(data, true);
+      await extractSubscriberData(data, true)
 
     if (withoutBpin || nutelfound || nutelnotfound) {
       if (modiConfig.workflowSteps.ocr.required && hasCompletOCR) {
-        setShowDialog(true);
+        setShowDialog(true)
       } else {
-        setHasAlreadyData(true);
+        setHasAlreadyData(true)
       }
-      setHasCompletLiveness(true);
+      setHasCompletLiveness(true)
     }
 
     if (validcredencials) {
-      setisOpenLoungModal(true);
+      setisOpenLoungModal(true)
     }
   }
 
   const handleLiveness = useCallback(
     async (event: any) => {
       if (event.detail.message.success) {
-        setIsLoading(prev => ({ ...prev, open: true }));
+        setIsLoading((prev) => ({ ...prev, open: true }))
 
-        const selfie = BASE64toBLOB(event.detail.message.data.image);
-        setSelfieBase64(event.detail.message.data.image);
-        setSelfie(selfie);
+        const selfie = BASE64toBLOB(event.detail.message.data.image)
+        setSelfieBase64(event.detail.message.data.image)
+        setSelfie(selfie)
 
-        setIsLoading(prev => ({
+        setIsLoading((prev) => ({
           ...prev,
           check1: { ...prev.check1, isTrue: true },
-        }));
+        }))
 
         const { data, error, message } = await search_person({
           selfie,
           config: search_person_url,
-        });
+        })
 
-        await new Promise(resolve => {
-          setTimeout(resolve, 600);
-        });
+        await new Promise((resolve) => {
+          setTimeout(resolve, 600)
+        })
 
-        setIsLoading(prev => ({
+        setIsLoading((prev) => ({
           ...prev,
           check2: { ...prev.check2, isTrue: true },
-        }));
+        }))
 
         if (error) {
-          await handleErrorCatch(error as AxiosError, selfie, message);
+          await handleErrorCatch(error as AxiosError, selfie, message)
         }
 
         if (data) {
-          await handleSubscriberFounded(data.data);
+          await handleSubscriberFounded(data.data)
         }
 
-        setIsLoading(prev => ({
+        setIsLoading((prev) => ({
           ...prev,
           open: false,
           check1: { isTrue: false, text: prev.check1.text },
           check2: { isTrue: false, text: prev.check2.text },
-        }));
+        }))
       } else if (event.detail.message.data.data) {
-        const reason = event.detail.message.data.data.reason;
+        const reason = event.detail.message.data.data.reason
         if (reason == 'CAMERA_UNKNOWN_ERROR') {
-          setModalOtherDevice(true);
-          console.log('[ORP]');
+          setModalOtherDevice(true)
+          console.log('[ORP]')
         }
       }
     },
@@ -261,27 +260,25 @@ export default function FaceRecogntianLiveness() {
       setHasCompletLiveness,
       setSelfie,
       setSelfieBase64,
-    ],
-  );
+    ]
+  )
 
   useEffect(() => {
-    livenessFn(isMobile, theme.primary);
+    livenessFn(isMobile, theme.primary)
 
-    const liveness = document.getElementById('liveness');
-    window.addEventListener('resize', () =>
-      livenessFn(isMobile, theme.primary),
-    );
+    const liveness = document.getElementById('liveness')
+    window.addEventListener('resize', () => livenessFn(isMobile, theme.primary))
 
     if (liveness) {
-      liveness.addEventListener('livenessResponse', handleLiveness);
+      liveness.addEventListener('livenessResponse', handleLiveness)
       return () => {
-        liveness.removeEventListener('livenessResponse', handleLiveness);
+        liveness.removeEventListener('livenessResponse', handleLiveness)
         window.removeEventListener('resize', () =>
-          livenessFn(isMobile, theme.primary),
-        );
-      };
+          livenessFn(isMobile, theme.primary)
+        )
+      }
     }
-  }, [handleLiveness, isMobile]);
+  }, [handleLiveness, isMobile])
 
   return (
     <main className="m-auto px-4 py-0 pb-16 sm:py-20 h-dvh">
@@ -289,13 +286,13 @@ export default function FaceRecogntianLiveness() {
         <HasCompleteProcess
           title="Processo de Reconhecimento facial concluido"
           goNext={() => {
-            const page = nextPage();
+            const page = nextPage()
             if (page === null) {
-              router(`/${companyId}/message`);
+              router(`/${companyId}/message`)
             }
           }}
           goPrev={() => {
-            previousPage();
+            previousPage()
           }}
         />
       ) : (
@@ -320,10 +317,10 @@ export default function FaceRecogntianLiveness() {
                 type="button"
                 className="z-50"
                 onTouchEnd={() => {
-                  previousPage();
+                  previousPage()
                 }}
                 onClick={() => {
-                  previousPage();
+                  previousPage()
                 }}
               >
                 Voltar
@@ -363,14 +360,14 @@ export default function FaceRecogntianLiveness() {
                   color: theme.destructive,
                 }}
                 onClick={() => {
-                  resetAllData();
-                  router(`/${companyId}`);
-                  setModalOtherDevice(false);
+                  resetAllData()
+                  router(`/${companyId}`)
+                  setModalOtherDevice(false)
                 }}
                 onTouchEnd={() => {
-                  resetAllData();
-                  router(`/${companyId}`);
-                  setModalOtherDevice(false);
+                  resetAllData()
+                  router(`/${companyId}`)
+                  setModalOtherDevice(false)
                 }}
               >
                 Cancelar
@@ -379,12 +376,12 @@ export default function FaceRecogntianLiveness() {
                 variant="default"
                 className="w-full"
                 onClick={() => {
-                  router(`/${companyId}/scanQrcode`);
-                  setModalOtherDevice(false);
+                  router(`/${companyId}/scanQrcode`)
+                  setModalOtherDevice(false)
                 }}
                 onTouchEnd={() => {
-                  router(`/${companyId}/scanQrcode`);
-                  setModalOtherDevice(false);
+                  router(`/${companyId}/scanQrcode`)
+                  setModalOtherDevice(false)
                 }}
               >
                 Sim
@@ -399,16 +396,16 @@ export default function FaceRecogntianLiveness() {
                 className="w-full"
                 variant="default"
                 onClick={() => {
-                  resetAllData();
-                  router(`/${companyId}`);
-                  setisOpenLoungModal(false);
-                  setHasAlreadyData(false);
+                  resetAllData()
+                  router(`/${companyId}`)
+                  setisOpenLoungModal(false)
+                  setHasAlreadyData(false)
                 }}
                 onTouchEnd={() => {
-                  resetAllData();
-                  router(`/${companyId}`);
-                  setisOpenLoungModal(false);
-                  setHasAlreadyData(false);
+                  resetAllData()
+                  router(`/${companyId}`)
+                  setisOpenLoungModal(false)
+                  setHasAlreadyData(false)
                 }}
               >
                 Entendi
@@ -423,18 +420,18 @@ export default function FaceRecogntianLiveness() {
                 className="w-full"
                 variant="default"
                 onClick={() => {
-                  setIsOpen(false);
-                  resetAllData();
-                  router(`/${companyId}`);
-                  setisOpenLoungModal(false);
-                  setHasAlreadyData(false);
+                  setIsOpen(false)
+                  resetAllData()
+                  router(`/${companyId}`)
+                  setisOpenLoungModal(false)
+                  setHasAlreadyData(false)
                 }}
                 onTouchEnd={() => {
-                  setIsOpen(false);
-                  resetAllData();
-                  router(`/${companyId}`);
-                  setisOpenLoungModal(false);
-                  setHasAlreadyData(false);
+                  setIsOpen(false)
+                  resetAllData()
+                  router(`/${companyId}`)
+                  setisOpenLoungModal(false)
+                  setHasAlreadyData(false)
                 }}
               >
                 Tentar novamente
@@ -460,5 +457,5 @@ export default function FaceRecogntianLiveness() {
         </>
       )}
     </main>
-  );
+  )
 }

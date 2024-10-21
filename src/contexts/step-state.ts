@@ -10,6 +10,7 @@ interface CustomFile extends File {
 }
 
 export interface IPersonData {
+  fileName: string
   file_doc: Blob | null | CustomFile
   failed_fields: Partial<IPersonData>
   similarity: number
@@ -121,6 +122,7 @@ export const useNDAModi = create<INDAPROPS>()((set) => ({
   isAddSubscriber: false,
   isOnline: true,
   personData: {
+    fileName: '',
     document_class_code: 'ID',
     expire_date: '',
     failed_fields: {},
@@ -272,6 +274,7 @@ export const useNDAModi = create<INDAPROPS>()((set) => ({
       hasCompletOCR: false,
       fieldsData: '',
       personData: {
+        fileName: '',
         document_class_code: 'ID',
         expire_date: '',
         file_doc: null,

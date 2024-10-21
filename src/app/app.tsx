@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useSystem } from '@/contexts/useSystem'
@@ -16,7 +15,7 @@ export default function Home() {
   const isQrcodeRequired = modiConfig.workflowSteps.scanQrcode.active
 
   async function handleRedirect() {
-    navigate(`/${companyId}/scanQrcode`) // Usando navigate para redirecionamento
+    navigate(`/${companyId}/scanQrcode`)
   }
 
   function getInitSubscriber() {

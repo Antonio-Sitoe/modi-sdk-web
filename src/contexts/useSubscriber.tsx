@@ -1,58 +1,58 @@
-import { format } from 'date-fns';
-import { useSystem } from '@/contexts/useSystem';
-import { useNDAModi } from '@/contexts/step-state';
-import { DocumentProps } from '@/@types/interfaces';
+import { format } from 'date-fns'
+import { useSystem } from '@/contexts/useSystem'
+import { useNDAModi } from '@/contexts/step-state'
+import { DocumentProps } from '@/@types/interfaces'
 
-import { BASE64toBLOB, formateDateBirth } from '@/utils/general';
-import { CheckSubscriberBpin } from '@/actions/client';
+import { BASE64toBLOB, formateDateBirth } from '@/utils/general'
+import { CheckSubscriberBpin } from '@/actions/client'
 
-type IApiResponseBpin = {
-  status: number;
+export type IApiResponseBpin = {
+  status: number
   data: {
-    matchBirthDay: boolean;
-    matchName: number;
-  };
-};
+    matchBirthDay: boolean
+    matchName: number
+  }
+}
 
 export function useSubscriber() {
-  const { setAllData, personData } = useNDAModi();
-  const { modiConfig } = useSystem();
+  const { setAllData, personData } = useNDAModi()
+  const { modiConfig } = useSystem()
 
-  const isBpin = modiConfig.apiEndpoints.bpinSearchEnabled;
+  const isBpin = modiConfig.apiEndpoints.bpinSearchEnabled
 
   async function extractSubscriberData(
     subscriberData: DocumentProps,
-    hasSubscriberFoundend: boolean,
+    hasSubscriberFoundend: boolean
   ): Promise<{
-    nutelfound: boolean;
-    nutelnotfound: boolean;
-    validcredencials: boolean;
-    message?: string;
-    withoutBpin?: boolean;
+    nutelfound: boolean
+    nutelnotfound: boolean
+    validcredencials: boolean
+    message?: string
+    withoutBpin?: boolean
   }> {
     if (hasSubscriberFoundend) {
-      const { birth_date, name } = subscriberhasFounded(subscriberData);
+      const { birth_date, name } = subscriberhasFounded(subscriberData)
       if (isBpin) {
         return CheckChannel(
           name,
           birth_date,
           hasSubscriberFoundend,
-          personData.phone_number,
-        );
+          personData.phone_number
+        )
       } else {
-        return checkWithoutBpin();
+        return checkWithoutBpin()
       }
     } else {
-      const { birth_date, name } = subscriberNotFounded(subscriberData);
+      const { birth_date, name } = subscriberNotFounded(subscriberData)
       if (isBpin) {
         return CheckChannel(
           name,
           birth_date,
           hasSubscriberFoundend,
-          personData.phone_number,
-        );
+          personData.phone_number
+        )
       } else {
-        return checkWithoutBpin();
+        return checkWithoutBpin()
       }
     }
   }
@@ -63,73 +63,73 @@ export function useSubscriber() {
       validcredencials: false,
       withoutBpin: true,
       message: '',
-    };
-    return response;
+    }
+    return response
   }
   async function CheckChannel(
     name: string,
     birth_date: string,
     scanWidthoutOcr: boolean,
-    phone_number: string,
+    phone_number: string
   ) {
     const response = await verifyPhoneSubscriber(
       name,
       birth_date,
       scanWidthoutOcr,
-      phone_number,
-    );
-    return response;
+      phone_number
+    )
+    return response
   }
   function subscriberNotFounded(details: DocumentProps) {
-    const parsedDetails = parseSubscriberDetails(details);
-    console.log('[LIVENESS COM OCR]', details);
-    console.log('[LIVENESS COM DETAILS]', parsedDetails);
-    setAllData(parsedDetails);
-    return parsedDetails;
+    const parsedDetails = parseSubscriberDetails(details)
+    console.log('[LIVENESS COM OCR]', details)
+    console.log('[LIVENESS COM DETAILS]', parsedDetails)
+    setAllData(parsedDetails)
+    return parsedDetails
   }
   async function verifyPhoneSubscriber(
     name: string,
     birth_date: string,
     scanWidthoutOcr: boolean,
-    phone_number: string,
+    phone_number: string
   ) {
     const responsebpn = await CheckSubscriberBpin<IApiResponseBpin>({
       birthday: format(birth_date, 'dd-MM-yyyy'),
       cell_number: phone_number,
       config: modiConfig.apiEndpoints.bpin,
       name: name,
-    });
+    })
     const response = {
       nutelfound: false,
       nutelnotfound: false,
       validcredencials: false,
       message: responsebpn?.message || '',
-    };
+    }
 
     const dadosCorespondem =
       responsebpn.data?.status === 201 &&
       responsebpn.data.data.matchBirthDay === true &&
-      responsebpn.data.data.matchName >= 50;
+      responsebpn.data.data.matchName >= 50
 
     if (responsebpn.error) {
-      console.log('ERRO NAO ESTA', responsebpn.error);
+      console.log('ERRO NAO ESTA', responsebpn.error)
 
-      response.validcredencials = true;
+      response.validcredencials = true
     } else if (dadosCorespondem) {
       if (scanWidthoutOcr) {
-        response.nutelfound = true;
+        response.nutelfound = true
       } else {
-        response.nutelnotfound = true;
+        response.nutelnotfound = true
       }
     } else {
-      response.validcredencials = true;
+      response.validcredencials = true
     }
-    return response;
+    return response
   }
   function subscriberhasFounded(details: DocumentProps) {
-    console.log('[LIVENESS sem OCR]', details);
-    const name = `${details.first_name} ${details.middle_name} ${details.last_name}`;
-    const birthdayDate = formateDateBirth(details.birth_date);
+    console.log('[LIVENESS sem OCR]', details)
+    const name = `${details.first_name} ${details.middle_name} ${details.last_name}`
+    const birthdayDate = formateDateBirth(details.birth_date)
     setAllData({
       document_type_id: details.document_type,
       document_number: details.document_number,
@@ -141,42 +141,40 @@ export function useSubscriber() {
       mother_name: details.mother_name,
       father_name: details.father_name,
       document_class_code: details?.document_class_code || 'ID',
-    });
+    })
     return {
       name,
       birth_date: birthdayDate,
-    };
+    }
   }
   function parseSubscriberDetails(details: DocumentProps) {
-    const middle_name = details.names?.split(' ') ?? ['', ''];
+    const middle_name = details.names?.split(' ') ?? ['', '']
     const portrait = details.portraitImage64
       ? BASE64toBLOB(details.portraitImage64)
-      : personData.portrait;
+      : personData.portrait
     const attachment = details.documentFrontB64
       ? BASE64toBLOB(details.documentFrontB64)
-      : personData.attachment;
-    const selfie = details.self
-      ? BASE64toBLOB(details.self)
-      : personData.selfie;
+      : personData.attachment
+    const selfie = details.self ? BASE64toBLOB(details.self) : personData.selfie
     const residence_document = details.documentBackB64
       ? BASE64toBLOB(details.documentBackB64)
-      : personData.residence_document;
+      : personData.residence_document
     const front_side = details.documentFrontB64
       ? BASE64toBLOB(details.documentFrontB64)
-      : personData.front_side;
+      : personData.front_side
     const back_side = details.documentBackB64
       ? BASE64toBLOB(details.documentBackB64)
-      : personData.back_side;
+      : personData.back_side
 
-    const similarityDetail = details.similarity;
+    const similarityDetail = details.similarity
 
     // Verifica se similarity é um número ou pode ser convertido para número
     const parsedSimilarity = isNaN(Number(similarityDetail))
       ? 0
-      : Number(similarityDetail);
+      : Number(similarityDetail)
 
     // Converte para uma porcentagem e formata com duas casas decimais
-    const similarity = parseFloat((parsedSimilarity * 100).toFixed(2));
+    const similarity = parseFloat((parsedSimilarity * 100).toFixed(2))
 
     return {
       front_side,
@@ -211,7 +209,7 @@ export function useSubscriber() {
       middle_name: middle_name[1] ? middle_name[1] : middle_name[0],
       residence_district_id: details.residence_district,
       document_class_code: details?.document_class_code || 'ID',
-    };
+    }
   }
-  return { extractSubscriberData, CheckChannel };
+  return { extractSubscriberData, CheckChannel }
 }
