@@ -20,16 +20,28 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { format } from 'date-fns'
 import { CreateSchema } from '@/utils/validations/schema'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { maskPhone } from '@/utils/general'
 import { useSystem } from '@/contexts/useSystem'
 import { useNDAModi } from '@/contexts/step-state'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { simulateAsyncCall } from '@/actions/client'
+import { CheckSubscriberBpin, simulateAsyncCall } from '@/actions/client'
 import { Form } from '@/components/ui/form'
 import { IFieldsProps } from '@/@types/types'
+import { IApiResponseBpin } from '@/contexts/useSubscriber'
+import {
+  LoadCheck,
+  LoaderRoot,
+  LoadImage,
+  LoadTitle,
+} from '@/components/ui/loader-with-steps'
+import {
+  InfoDialogContainer,
+  InfoDialogImage,
+  InfoDialogRoot,
+} from '@/components/dialogs/info-dialog'
 
 // const formFields: FormFieldsType = [
 // { label: 'Nome completo', type: 'TEXT', required: true, name: 'name' },
@@ -56,7 +68,22 @@ import { IFieldsProps } from '@/@types/types'
 export default function Register() {
   const [animationParent] = useAutoAnimate()
   const { modiConfig, previousPage, nextPage } = useSystem()
-  const { personData, setAllData, setIsLoading } = useNDAModi()
+  const { personData, setAllData } = useNDAModi()
+  const [message, setMessage] = useState('')
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
+  const [isLoading, setIsLoading] = useState({
+    open: false,
+    title: '',
+    check1: {
+      isTrue: false,
+      text: 'Carregando os dados',
+    },
+    check2: {
+      isTrue: false,
+      text: 'O número existe na BPIN 1.0',
+    },
+  })
 
   const { phone_number, name, birth_date, email, nuit, file_doc } = personData
   const formFields =
@@ -83,7 +110,13 @@ export default function Register() {
   })
 
   async function onSubmit(data: any) {
-    setIsLoading({ isLoad: true, title: 'Carregando os dados' })
+    setIsLoading((prev) => ({
+      ...prev,
+      check1: { ...prev.check1, isTrue: true },
+    }))
+
+    console.clear()
+    console.log('data', data)
 
     if (data?.name) {
       setAllData({
@@ -105,15 +138,58 @@ export default function Register() {
         birth_date: format(data.birthday, 'yyyy-MM-dd'),
       })
     }
-
     if (data?.email) {
       setAllData({
         email: data?.email,
       })
     }
-    nextPage()
-    await simulateAsyncCall(false, 1500)
-    setIsLoading({ isLoad: false, title: '' })
+
+    if (
+      data?.phoneNumber &&
+      data?.name &&
+      data?.birthday &&
+      modiConfig.apiEndpoints.bpinSearchEnabled
+    ) {
+      const responsebpn = await CheckSubscriberBpin<IApiResponseBpin>({
+        birthday: format(data?.birthday, 'dd-MM-yyyy'),
+        cell_number: data?.phoneNumber,
+        config: modiConfig.apiEndpoints.bpin,
+        name: data?.name,
+      })
+
+      setIsLoading((prev) => ({
+        ...prev,
+        check2: { ...prev.check2, isTrue: true },
+      }))
+      await simulateAsyncCall(false, 1000)
+      setIsOpenModal(true)
+
+      if (
+        responsebpn.data?.status === 201 &&
+        responsebpn.data.data.matchBirthDay === true &&
+        responsebpn.data.data.matchName >= 50
+      ) {
+        setMessage(
+          responsebpn?.message ||
+            `O número de telemóvel <strong>${data?.phone}</strong> está registado`
+        )
+      } else {
+        setMessage(
+          responsebpn?.message ||
+            `O número de telemóvel <strong>${data?.phone}</strong> não está registado`
+        )
+      }
+    } else {
+      nextPage()
+      await simulateAsyncCall(false, 900)
+    }
+
+    setIsLoading((prev) => ({
+      ...prev,
+      open: false,
+      check1: { isTrue: false, text: prev.check1.text },
+      check2: { isTrue: false, text: prev.check2.text },
+    }))
   }
 
   useEffect(() => {
@@ -273,6 +349,33 @@ export default function Register() {
           </Form>
         </div>
       </section>
+      <LoaderRoot open={isLoading.open}>
+        <LoadImage />
+        <LoadTitle>Pesquisando se:</LoadTitle>
+        <LoadCheck
+          check={isLoading.check1.isTrue}
+          title={isLoading.check1.text}
+        />
+        <LoadCheck
+          check={isLoading.check2.isTrue}
+          title={isLoading.check2.text}
+        />
+      </LoaderRoot>
+
+      <InfoDialogRoot open={isOpenModal}>
+        <InfoDialogImage warn />
+        <InfoDialogContainer message={message}>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => {
+              nextPage()
+            }}
+          >
+            Continuar
+          </Button>
+        </InfoDialogContainer>
+      </InfoDialogRoot>
     </main>
   )
 }
