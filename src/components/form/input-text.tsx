@@ -374,8 +374,12 @@ export function InputEmailOrPhone({
           if (value === 'email') {
             setPhoneNumber('')
             form.setValue('phone', '')
+            form.unregister('phone')
+            form.register('email')
           } else {
             form.setValue('email', '')
+            form.register('phone')
+            form.unregister('email')
           }
           setIsEmail(value)
         }}
