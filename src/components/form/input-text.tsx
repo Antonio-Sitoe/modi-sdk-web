@@ -6,7 +6,6 @@ import {
   FormField,
   FormMessage,
   FormControl,
-  FormLabel,
 } from '@/components/ui/form'
 
 import {
@@ -107,7 +106,6 @@ export function InputText({
 export function InputDocs({
   form,
   name,
-  required,
   label,
 }: {
   name: string
@@ -200,13 +198,7 @@ export function InputPickerDate({
                 name={name}
                 label={label}
                 onChange={(
-                  event:
-                    | string
-                    | number
-                    | Date
-                    | dayjs.Dayjs
-                    | null
-                    | undefined,
+                  event: string | number | Date | dayjs.Dayjs | null | undefined
                 ) => {
                   try {
                     setAllData({

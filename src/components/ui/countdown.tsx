@@ -22,7 +22,7 @@ function Countdown({
     } else {
       setValue(false)
     }
-  }, [setValue, time])
+  }, [setTime, setValue, time])
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60)

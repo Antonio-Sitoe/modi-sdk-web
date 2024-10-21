@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import {
@@ -124,7 +125,7 @@ export default function FaceRecogntianLiveness() {
   async function handleErrorCatch(
     error: AxiosError,
     selfie: Blob,
-    message: string | null,
+    message: string | null
   ) {
     if (error instanceof AxiosError && error.response?.status === 404) {
       if (
@@ -176,7 +177,7 @@ export default function FaceRecogntianLiveness() {
     } else {
       setMessage(
         message ||
-          'No momento, não é possível realizar a pesquisa solicitada. Por favor, tente novamente mais tarde.',
+          'No momento, não é possível realizar a pesquisa solicitada. Por favor, tente novamente mais tarde.'
       )
       setisOpenLoungModal(true)
     }
@@ -260,7 +261,7 @@ export default function FaceRecogntianLiveness() {
       setHasCompletLiveness,
       setSelfie,
       setSelfieBase64,
-    ],
+    ]
   )
 
   useEffect(() => {
@@ -274,7 +275,7 @@ export default function FaceRecogntianLiveness() {
       return () => {
         liveness.removeEventListener('livenessResponse', handleLiveness)
         window.removeEventListener('resize', () =>
-          livenessFn(isMobile, theme.primary),
+          livenessFn(isMobile, theme.primary)
         )
       }
     }

@@ -6,7 +6,9 @@ import { Label } from '@/components/ui/label'
 import { X } from 'lucide-react'
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string
+}
 
 const FloatingInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {
@@ -18,7 +20,7 @@ const FloatingInput = React.forwardRef<HTMLInputElement, InputProps>(
         {...props}
       />
     )
-  },
+  }
 )
 FloatingInput.displayName = 'FloatingInput'
 
@@ -30,7 +32,7 @@ const FloatingLabel = React.forwardRef<
     <Label
       className={cn(
         'peer-focus:secondary peer-focus:dark:secondary absolute start-2 top-1.5 z-40 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 dark:bg-white rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 peer-disabled:opacity-100',
-        className,
+        className
       )}
       ref={ref}
       {...props}

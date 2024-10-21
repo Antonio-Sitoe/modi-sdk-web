@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useSystem } from '@/contexts/useSystem'

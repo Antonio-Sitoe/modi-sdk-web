@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
@@ -19,7 +20,7 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { format } from 'date-fns'
 import { CreateSchema } from '@/utils/validations/schema'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { maskPhone } from '@/utils/general'
 import { useSystem } from '@/contexts/useSystem'
 import { useNDAModi } from '@/contexts/step-state'
@@ -57,8 +58,7 @@ export default function Register() {
   const { modiConfig, previousPage, nextPage } = useSystem()
   const { personData, setAllData, setIsLoading } = useNDAModi()
 
-  const { phone_number, name, birth_date, email, nuit, file_doc, fileName } =
-    personData
+  const { phone_number, name, birth_date, email, nuit, file_doc } = personData
   const formFields =
     modiConfig.workflowSteps.register_aditional_data.data.fields
 
@@ -75,7 +75,7 @@ export default function Register() {
         name: field.name,
         required: field.required,
         type: field.type,
-      })) || [],
+      })) || []
   )
 
   const form = useForm<z.infer<typeof schema>>({

@@ -20,7 +20,7 @@ function Message() {
     if (modiConfig.workflowSteps.message.required === false) {
       window.close()
     }
-  }, [])
+  }, [modiConfig.workflowSteps.message.required])
 
   return (
     <main className="max-w-lg m-auto px-4 py-16 sm:py-20 h-dvh">
