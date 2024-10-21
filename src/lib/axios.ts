@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import axios from 'axios'
 import cancelTokenManager from '../utils/cancelrequest'
 import { netErrorConections, retryRequest } from '@/utils/net-conexions'
@@ -5,6 +6,7 @@ import { netErrorConections, retryRequest } from '@/utils/net-conexions'
 const token = '$2b$10$LbK5CowvIw/41hisDp0douLnlIkD/LpbTnlkCq2TEoqEGUCQalmGa'
 const authorization = 'Bearer ' + token
 
+// @ts-ignore
 const api_base = import.meta.env.VITE_API_BASE
 
 const api = axios.create({
