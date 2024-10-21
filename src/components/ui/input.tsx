@@ -3,13 +3,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // @ts-nocheck
-import * as React from 'react';
-import { TextField, TextFieldProps } from '@mui/material';
-import { cn } from '@/lib/utils';
-import { X } from 'lucide-react';
-import { DatePicker } from '@mui/x-date-pickers';
-import { Button } from './button';
-import { useSystem } from '@/contexts/useSystem';
+import * as React from 'react'
+import { TextField, TextFieldProps } from '@mui/material'
+import { cn } from '@/lib/utils'
+import { X } from 'lucide-react'
+import { DatePicker } from '@mui/x-date-pickers'
+import { Button } from './button'
+import { useSystem } from '@/contexts/useSystem'
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -21,20 +21,26 @@ const Inputt = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className={cn(
           'flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-ring focus:ring-primary focus:border-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-          className,
+          className
         )}
         ref={ref}
         {...props}
       />
-    );
-  },
-);
-Inputt.displayName = 'Input';
+    )
+  }
+)
+Inputt.displayName = 'Input'
 
 const Input = React.forwardRef<HTMLInputElement, TextFieldProps>(
   ({ className, id, type, label, error, onChange, value, ...props }, ref) => {
-    const { theme } = useSystem();
-    const [show, setShow] = React.useState(false);
+    const { theme } = useSystem()
+    const [show, setShow] = React.useState(false)
+
+    React.useEffect(() => {
+      if (value?.length) {
+        setShow(true)
+      }
+    }, [value])
 
     return (
       <TextField
@@ -60,27 +66,27 @@ const Input = React.forwardRef<HTMLInputElement, TextFieldProps>(
         }}
         value={value}
         onChange={onChange}
-        onBlur={event => {
+        onBlur={(event) => {
           if ('value' in event.target) {
-            const value = event.target.value;
-            if (!value) setShow(false);
-            else setShow(true);
+            const value = event.target.value
+            if (!value) setShow(false)
+            else setShow(true)
           }
         }}
-        onBlurCapture={event => {
+        onBlurCapture={(event) => {
           if ('value' in event.target) {
-            const value = event.target.value;
-            if (!value) setShow(false);
-            else setShow(true);
+            const value = event.target.value
+            if (!value) setShow(false)
+            else setShow(true)
           }
         }}
         onFocus={() => {
-          setShow(true);
+          setShow(true)
         }}
         className={cn('flex w-full', className)}
         ref={ref}
         InputProps={{
-          id: id,
+          id,
           endAdornment: value ? (
             <Button
               className="px-2 bg-transparent hover:bg-transparent"
@@ -88,15 +94,15 @@ const Input = React.forwardRef<HTMLInputElement, TextFieldProps>(
               variant="link"
               onClick={() => {
                 const currentInput = document.querySelector(
-                  `#${id}`,
-                ) as HTMLInputElement;
-                setShow(false);
-                currentInput?.focus();
+                  `#${id}`
+                ) as HTMLInputElement
+                setShow(false)
+                currentInput?.focus()
                 onChange({
                   target: {
                     value: '',
                   },
-                });
+                })
               }}
             >
               <X className="text-slate-400 border-white border" />
@@ -115,18 +121,18 @@ const Input = React.forwardRef<HTMLInputElement, TextFieldProps>(
         }}
         {...props}
       />
-    );
-  },
-);
-Input.displayName = 'Input';
+    )
+  }
+)
+Input.displayName = 'Input'
 
 interface TextProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  show: boolean;
-  error: boolean;
-  label: React.ReactNode;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  phone: any;
-  handleChange(v: any): void;
+  show: boolean
+  error: boolean
+  label: React.ReactNode
+  setShow: React.Dispatch<React.SetStateAction<boolean>>
+  phone: any
+  handleChange(v: any): void
 }
 const PhoneInput = ({
   handleChange,
@@ -137,15 +143,15 @@ const PhoneInput = ({
   error,
   ...props
 }: TextProps) => {
-  const { theme } = useSystem();
+  const { theme } = useSystem()
   function handleFocus() {
-    setShow(true);
+    setShow(true)
   }
   React.useEffect(() => {
     if (phone?.length) {
-      setShow(true);
+      setShow(true)
     }
-  }, [phone]);
+  }, [phone])
 
   return (
     <TextField
@@ -158,18 +164,18 @@ const PhoneInput = ({
       value={phone}
       onChange={handleChange}
       onFocus={handleFocus}
-      onBlurCapture={event => {
+      onBlurCapture={(event) => {
         if ('value' in event.target) {
-          const value = event.target.value;
-          if (!value) setShow(false);
-          else setShow(true);
+          const value = event.target.value
+          if (!value) setShow(false)
+          else setShow(true)
         }
       }}
-      onBlur={event => {
+      onBlur={(event) => {
         if ('value' in event.target) {
-          const value = event.target.value;
-          if (!value) setShow(false);
-          else setShow(true);
+          const value = event.target.value
+          if (!value) setShow(false)
+          else setShow(true)
         }
       }}
       className={'flex w-full'}
@@ -196,14 +202,14 @@ const PhoneInput = ({
             variant="link"
             onClick={() => {
               const currentInput = document.querySelector(
-                '#phone-input',
-              ) as HTMLInputElement;
-              currentInput?.focus();
+                '#phone-input'
+              ) as HTMLInputElement
+              currentInput?.focus()
               handleChange({
                 target: {
                   value: '',
                 },
-              });
+              })
             }}
           >
             <X className="text-slate-400 border-white border" />
@@ -220,8 +226,8 @@ const PhoneInput = ({
         },
       }}
     />
-  );
-};
+  )
+}
 
 function InputDatePicker({
   label = 'Data de nascimento',
@@ -229,7 +235,7 @@ function InputDatePicker({
   onChange,
   ...props
 }) {
-  const { theme } = useSystem();
+  const { theme } = useSystem()
 
   return (
     <DatePicker
@@ -278,7 +284,7 @@ function InputDatePicker({
         },
       }}
     />
-  );
+  )
 }
 
-export { Inputt, PhoneInput, Input, InputDatePicker };
+export { Inputt, PhoneInput, Input, InputDatePicker }

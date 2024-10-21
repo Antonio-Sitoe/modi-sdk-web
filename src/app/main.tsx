@@ -1,79 +1,78 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import './globals.css';
+import './globals.css'
 
-import { useEffect, useState } from 'react';
-import { SystemStorage } from '@/contexts/useSystem';
-import { getCompanySettings } from '@/actions/server';
-import NotFoundSubscriber from './not-found';
+import { useEffect, useState, StrictMode } from 'react'
+import { SystemStorage } from '@/contexts/useSystem'
+import { getCompanySettings } from '@/actions/server'
+import NotFoundSubscriber from './not-found'
 
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Home from './app';
-import Register from './register_aditional_data';
-import ShowData from './show_data';
-import FaceRecogntianLiveness from './liveness';
-import { SystemConfiguration } from '@/@types/types';
-import Loading from './loading';
-import ChooseFlowPage from './scanQrcode';
-import Message from './message';
-import FaceAndDocs from './ocr';
+import Home from './app'
+import Register from './register_aditional_data'
+import ShowData from './show_data'
+import FaceRecogntianLiveness from './liveness'
+import { SystemConfiguration } from '@/@types/types'
+import Loading from './loading'
+import ChooseFlowPage from './scanQrcode'
+import Message from './message'
+import FaceAndDocs from './ocr'
 
 export function RootLayout() {
-  const params = new URLSearchParams(window.location.search);
-  const companyId = params.get('companyId');
+  const params = new URLSearchParams(window.location.search)
+  const companyId = params.get('companyId')
 
-  console.log(companyId);
-  const [data, setData] = useState<null | SystemConfiguration>(null);
-  const [error, setError] = useState(false);
+  console.log(companyId)
+  const [data, setData] = useState<null | SystemConfiguration>(null)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     async function fetchCompanySettings(companyId: string) {
-      const { data, error } = await getCompanySettings(companyId);
+      const { data, error } = await getCompanySettings(companyId)
 
       if (error || !data) {
-        setError(true);
-        return;
+        setError(true)
+        return
       }
       if (data) {
-        setData(data);
+        setData(data)
       }
     }
     if (companyId) {
-      fetchCompanySettings(companyId);
+      fetchCompanySettings(companyId)
     }
-  }, [companyId]);
+  }, [companyId])
 
   useEffect(() => {
     if (data) {
-      const docScript = document.createElement('script');
+      const docScript = document.createElement('script')
       // @ts-ignore
-      docScript.src = data?.apiEndpoints?.ocrSdk;
-      docScript.type = 'module';
-      docScript.crossOrigin = 'anonymous';
-      document.head.appendChild(docScript);
+      docScript.src = data?.apiEndpoints?.ocrSdk
+      docScript.type = 'module'
+      docScript.crossOrigin = 'anonymous'
+      document.head.appendChild(docScript)
 
-      const livenessScript = document.createElement('script');
+      const livenessScript = document.createElement('script')
       // @ts-ignore
-      livenessScript.src = data?.apiEndpoints?.livenessSdk;
-      livenessScript.type = 'module';
-      livenessScript.crossOrigin = 'anonymous';
-      document.head.appendChild(livenessScript);
+      livenessScript.src = data?.apiEndpoints?.livenessSdk
+      livenessScript.type = 'module'
+      livenessScript.crossOrigin = 'anonymous'
+      document.head.appendChild(livenessScript)
 
       return () => {
-        document.head.removeChild(docScript);
-        document.head.removeChild(livenessScript);
-      };
+        document.head.removeChild(docScript)
+        document.head.removeChild(livenessScript)
+      }
     }
-  }, [data]);
+  }, [data])
 
   if (error || !companyId) {
-    return <NotFoundSubscriber />;
+    return <NotFoundSubscriber />
   }
 
   if (!data) {
-    return <Loading />;
+    return <Loading />
   }
 
   return (
@@ -93,11 +92,11 @@ export function RootLayout() {
         </div>
       </SystemStorage>
     </BrowserRouter>
-  );
+  )
 }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RootLayout />
-  </StrictMode>,
-);
+  </StrictMode>
+)

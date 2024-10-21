@@ -200,7 +200,6 @@ export function InputPickerDate({
               <InputDatePicker
                 name={name}
                 label={label}
-                // @ts-ignore
                 onChange={(
                   event: string | number | Date | dayjs.Dayjs | null | undefined
                 ) => {
