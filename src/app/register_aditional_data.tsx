@@ -57,16 +57,25 @@ export default function Register() {
   const { modiConfig, previousPage, nextPage } = useSystem()
   const { personData, setAllData, setIsLoading } = useNDAModi()
 
-  const { phone_number, name, birth_date, email, nuit, file_doc } = personData
+  const { phone_number, name, birth_date, email, nuit, file_doc, fileName } =
+    personData
   const formFields =
     modiConfig.workflowSteps.register_aditional_data.data.fields
 
   const schema = CreateSchema(
-    formFields?.map((field) => ({
-      name: field.name,
-      required: field.required,
-      type: field.type,
-    })) || []
+    formFields
+      ?.filter((field) => {
+        // Verifica se o campo é do tipo 'FILE|DOCS' e se já existe um arquivo
+        if (field.type === 'FILE|DOCS' && file_doc) {
+          return false // Exclui este campo da lista se já houver um arquivo
+        }
+        return true // Mantém os outros campos
+      })
+      ?.map((field) => ({
+        name: field.name,
+        required: field.required,
+        type: field.type,
+      })) || []
   )
 
   const form = useForm<z.infer<typeof schema>>({
@@ -128,7 +137,6 @@ export default function Register() {
       // @ts-ignore
       form.setValue('phoneNumber', maskPhone(phone_number))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const renderInput = (field: IFieldsProps, index: number) => {

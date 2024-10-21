@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { z } from 'zod';
-import { Type } from '@/@types/types';
-import { nuitSchema } from './nuit';
-import { fileSchema } from './file';
-import { nameSchema } from './name';
-import { emailSchema } from './email';
-import { phoneSchema } from './phone';
-import { birthdaySchema } from './birthday';
-import { serialNumberSchema } from './serial_number';
+import { z } from 'zod'
+import { Type } from '@/@types/types'
+import { nuitSchema } from './nuit'
+import { fileSchema } from './file'
+import { nameSchema } from './name'
+import { emailSchema } from './email'
+import { phoneSchema } from './phone'
+import { birthdaySchema } from './birthday'
+import { serialNumberSchema } from './serial_number'
 
 const fieldSchemas = {
   name: nameSchema,
@@ -17,48 +17,49 @@ const fieldSchemas = {
   email: emailSchema,
   serial_number: serialNumberSchema,
   file: fileSchema,
-};
+}
 
 export function CreateSchema(
   formFields: Array<{
-    name: string;
-    required: boolean;
-    type: Type;
-  }>,
+    name: string
+    required: boolean
+    type: Type
+  }>
 ) {
-  const objectSchema = {};
-  formFields.forEach(field => {
-    const fieldName = field.name;
+  const objectSchema = {}
+  console.log('formFields', formFields)
+  formFields.forEach((field) => {
+    const fieldName = field.name
 
     if (field.type === 'EMAIL|PHONE') {
       // @ts-ignore
-      objectSchema.email = emailSchema.optional();
+      objectSchema.email = emailSchema.optional()
       // @ts-ignore
-      objectSchema.phoneNumber = phoneSchema.optional();
+      objectSchema.phoneNumber = phoneSchema.optional()
     } else if (field.type === 'FILE|DOCS') {
       // @ts-ignore
-      objectSchema[fieldName] = fieldSchemas.file;
+      objectSchema[fieldName] = fieldSchemas.file
       if (field.required === false) {
         // @ts-ignore
-        objectSchema[fieldName] = fieldSchemas.file.optional();
+        objectSchema[fieldName] = fieldSchemas.file.optional()
       }
     } else {
       // @ts-ignore
       if (fieldSchemas[fieldName]) {
         // @ts-ignore
-        objectSchema[fieldName] = fieldSchemas[fieldName];
+        objectSchema[fieldName] = fieldSchemas[fieldName]
         if (field.required === false) {
           // @ts-ignore
-          objectSchema[fieldName] = objectSchema[fieldName].optional();
+          objectSchema[fieldName] = objectSchema[fieldName].optional()
         }
       }
     }
-  });
+  })
 
   // Retornar o esquema Zod com os campos dinâmicos
   return z.object({
     ...objectSchema,
-  });
+  })
 }
 
 //  [x] FAZER UMA FUNCAO QUE RECEBE UM ARRAY DE CAMPOS E RETORNA SCHEMA

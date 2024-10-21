@@ -133,7 +133,7 @@ export function InputDocs({
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <div className="w-full space-y-2">
+            <div className="w-full space-y-2 relative">
               <Label
                 htmlFor="file"
                 className="text-sm font-medium text-gray-700"
@@ -157,9 +157,8 @@ export function InputDocs({
                 <Input
                   id="file"
                   type="file"
-                  className="hidden h-0 w-0"
-                  style={{ display: 'none' }}
-                  required={required}
+                  className="absolute opacity-0 h-0 w-0 top-0" // Torna o input
+                  style={{ position: 'absolute', opacity: 0 }}
                   {...field}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     if (event.target?.files) {
