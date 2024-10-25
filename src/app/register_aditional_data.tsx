@@ -34,7 +34,6 @@ import { IApiResponseBpin } from '@/contexts/useSubscriber'
 import {
   LoadCheck,
   LoaderRoot,
-  LoadImage,
   LoadTitle,
 } from '@/components/ui/loader-with-steps'
 import {
@@ -77,10 +76,6 @@ export default function Register() {
     title: '',
     check1: {
       isTrue: false,
-      text: 'Carregando os dados',
-    },
-    check2: {
-      isTrue: false,
       text: 'O número existe na BPIN 1.0',
     },
   })
@@ -112,7 +107,8 @@ export default function Register() {
   async function onSubmit(data: any) {
     setIsLoading((prev) => ({
       ...prev,
-      check1: { ...prev.check1, isTrue: true },
+      open: true,
+      check1: { ...prev.check1, isTrue: false },
     }))
 
     console.clear()
@@ -159,9 +155,10 @@ export default function Register() {
 
       setIsLoading((prev) => ({
         ...prev,
-        check2: { ...prev.check2, isTrue: true },
+        open: true,
+        check1: { ...prev.check1, isTrue: true },
       }))
-      await simulateAsyncCall(false, 1000)
+      await simulateAsyncCall(false, 400)
       setIsOpenModal(true)
 
       if (
@@ -171,12 +168,12 @@ export default function Register() {
       ) {
         setMessage(
           responsebpn?.message ||
-            `O número de telemóvel <strong>${data?.phone}</strong> está registado`
+            `O número de telemóvel <strong>${data?.phoneNumber}</strong> está registado`
         )
       } else {
         setMessage(
           responsebpn?.message ||
-            `O número de telemóvel <strong>${data?.phone}</strong> não está registado`
+            `O número de telemóvel <strong>${data?.phoneNumber}</strong> não está registado`
         )
       }
     } else {
@@ -188,7 +185,6 @@ export default function Register() {
       ...prev,
       open: false,
       check1: { isTrue: false, text: prev.check1.text },
-      check2: { isTrue: false, text: prev.check2.text },
     }))
   }
 
@@ -350,15 +346,10 @@ export default function Register() {
         </div>
       </section>
       <LoaderRoot open={isLoading.open}>
-        <LoadImage />
-        <LoadTitle>Pesquisando se:</LoadTitle>
+        <LoadTitle>Validando se: </LoadTitle>
         <LoadCheck
           check={isLoading.check1.isTrue}
           title={isLoading.check1.text}
-        />
-        <LoadCheck
-          check={isLoading.check2.isTrue}
-          title={isLoading.check2.text}
         />
       </LoaderRoot>
 

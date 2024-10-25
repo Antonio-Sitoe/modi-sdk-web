@@ -104,10 +104,16 @@ function LoaderRoot({
 
 function LoadImage({ img }: { img?: string }) {
   const { isOnline } = useNDAModi()
+  const checkimg = useSystem().modiConfig.assets.warnIcon
   return (
     <div className="text-center mx-auto mb-5 sm:hidden flex">
       {isOnline && (
-        <img src={img || '/WarnQuestion.svg'} width={40} height={40} alt="" />
+        <img
+          src={img || checkimg || '/WarnQuestion.svg'}
+          width={40}
+          height={40}
+          alt=""
+        />
       )}
     </div>
   )
@@ -121,7 +127,7 @@ function LoadCheck({ check, title }: { check: boolean; title: string }) {
       <div
         className={cn(
           'w-6 h-6 border-[#888888] bg-white rounded-full flex items-center justify-center',
-          !check && 'border',
+          !check && 'border'
         )}
       >
         {check && (
